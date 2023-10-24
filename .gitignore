@@ -40,6 +40,7 @@
 !+src/**.m
 !+tools/**.m
 !+triangulation/**.m
+!+TreeQSM/**.m
 
 ## Allow Manual and related images.
 
