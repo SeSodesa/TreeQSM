@@ -213,7 +213,7 @@ else
   Trunk = union(Trunk,vertcat(Nei{Trunk})); % Expand with neighbors
 
   % Define connected components of Trunk and select the largest component
-  [Comp,CS] = connected_components(Nei,Trunk,0,aux.Fal);
+  [Comp,CS] = TreeQSM.tools.connected_components(Nei,Trunk,0,aux.Fal);
   [~,I] = max(CS);
   Trunk = Comp{I};
 
@@ -224,16 +224,16 @@ else
   Points = Ce(Trunk,:);
   c.start = mean(Points);
   c.axis = [0 0 1];
-  c.radius = mean(distances_to_line(Points,c.axis,c.start));
-  c = least_squares_cylinder(Points,c);
+  c.radius = mean(TreeQSM.tools.distances_to_line(Points,c.axis,c.start));
+  c = TreeQSM.least_squares_fitting.least_squares_cylinder(Points,c);
 
   % Remove far away points and fit new cylinder
-  dis = distances_to_line(Points,c.axis,c.start);
+  dis = TreeQSM.tools.distances_to_line(Points,c.axis,c.start);
   [~,I] = sort(abs(dis));
   I = I(1:ceil(0.9*length(I)));
   Points = Points(I,:);
   Trunk = Trunk(I);
-  c = least_squares_cylinder(Points,c);
+  c = TreeQSM.least_squares_fitting.least_squares_cylinder(Points,c);
 
   % Select the sets in the bottom part of the trunk and remove sets too
   % far away form the cylinder axis (also remove far away points from sets)
@@ -246,10 +246,10 @@ else
   a = max(0.06,0.2*c.radius);
   b = max(0.04,0.15*c.radius);
   for i = 1:n
-    d = distances_to_line(Ce(TrunkBot(i),:),c.axis,c.start);
+    d = TreeQSM.tools.distances_to_line(Ce(TrunkBot(i),:),c.axis,c.start);
     if d < c.radius+a
       B = Bal{Trunk(i)};
-      d = distances_to_line(P(B,:),c.axis,c.start);
+      d = TreeQSM.tools.distances_to_line(P(B,:),c.axis,c.start);
       I = d < c.radius+b;
       Bal{Trunk(i)} = B(I);
     else
@@ -312,7 +312,7 @@ Trunk(Base) = true;
 % Expand Trunk from the base above with neighbors as long as possible
 Exp = Base; % the current "top" of Trunk
 % select the unique neighbors of Exp
-Exp = unique_elements([Exp; vertcat(Nei{Exp})],aux.Fal);
+Exp = TreeQSM.tools.unique_elements([Exp; vertcat(Nei{Exp})],aux.Fal);
 I = Trunk(Exp);
 J = Forb(Exp);
 Exp = Exp(~I|~J); % Only non forbidden sets that are not already in Trunk
@@ -420,9 +420,9 @@ while ~isempty(Exp)
       Dist = zeros(n,m);
       Cos = zeros(n,m);
       for i = 1:n
-        V = mat_vec_subtraction(Ce(SetsAbove,:),Ce(Region(i),:));
+        V = TreeQSM.tools.mat_vec_subtraction(Ce(SetsAbove,:),Ce(Region(i),:));
         Len = sum(V.*V,2);
-        v = normalize(V);
+        v = TreeQSM.tools.normalize(V);
         Dist(i,:) = Len';
         Cos(i,:) = v(:,3)';
       end
@@ -508,7 +508,7 @@ Trunk = aux.Fal;
 Trunk(MainBranches > 0) = true;
 
 % Update the neighbors to make the main branches connected
-[Par,CC] = cubical_partition(Ce,3*inputs.PatchDiam2Max,10);
+[Par,CC] = TreeQSM.tools.cubical_partition(Ce,3*inputs.PatchDiam2Max,10);
 Sets = zeros(aux.nb,1,'uint32');
 BI = max(MainBranches);
 N = size(Par);
@@ -516,7 +516,7 @@ for i = 1:BI
   if MainBranchIndexes(i)
     Branch = MainBranches == i; % The sets forming branch "i"
     % the connected components of "Branch":
-    Comps = connected_components(Nei,Branch,1,aux.Fal);
+    Comps = TreeQSM.tools.connected_components(Nei,Branch,1,aux.Fal);
     n = size(Comps,1);
     % Connect the components to each other as long as there are more than
     % one component
@@ -590,7 +590,7 @@ for i = 1:BI
         end
       end
 
-      Comps = connected_components(Nei,Branch,1,aux.Fal);
+      Comps = TreeQSM.tools.connected_components(Nei,Branch,1,aux.Fal);
       n = size(Comps,1);
     end
   end
@@ -641,7 +641,7 @@ cover.neighbor = Nei;
 
 % Check if the trunk is still in mutliple components and select the bottom
 % component to define "Trunk":
-[comps,cs] = connected_components(cover.neighbor,Trunk,aux.Fal);
+[comps,cs] = TreeQSM.tools.connected_components(cover.neighbor,Trunk,aux.Fal);
 if length(cs) > 1
   [cs,I] = sort(cs,'descend');
   comps = comps(I);
@@ -700,10 +700,10 @@ end
 
 % Determine the components of "Other"
 if any(Other)
-  Comps = connected_components(Nei,Other,1,aux.Fal);
+  Comps = TreeQSM.tools.connected_components(Nei,Other,1,aux.Fal);
   nc = size(Comps,1);
   NonClassified = true(nc,1);
-  %plot_segs(P,Comps,6,1,cover.ball)
+  %TreeQSM.plotting.plot_segs(P,Comps,6,1,cover.ball)
   %pause
 else
   NonClassified = false;
@@ -716,7 +716,7 @@ while any(NonClassified)
   again = true; % check connections again with same "distance" if true
 
   % Partition the centers of the cover sets into cubes with size k*dmin
-  [Par,CC] = cubical_partition(Ce,k*inputs.PatchDiam1);
+  [Par,CC] = TreeQSM.tools.cubical_partition(Ce,k*inputs.PatchDiam1);
   Neighbors = cell(nc,1);
   Sizes = zeros(nc,2);
   Pass = true(nc,1);

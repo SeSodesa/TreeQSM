@@ -1,15 +1,15 @@
 % This file is part of TREEQSM.
-% 
+%
 % TREEQSM is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
-% 
+%
 % TREEQSM is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
-% 
+%
 % You should have received a copy of the GNU General Public License
 % along with TREEQSM.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -17,7 +17,7 @@ function QSM = simplify_qsm(QSM,MaxOrder,SmallRadii,ReplaceIterations,Plot,Disp)
 
 % ---------------------------------------------------------------------
 % SIMPLIFY_QSM.M   Simplifies cylinder QSMs by restricting the maximum
-%                       branching order, by removing thin branches, and by 
+%                       branching order, by removing thin branches, and by
 %                       replacing two concecutive cylinders with a longer cylinder
 %
 % Version 2.0.0
@@ -31,11 +31,11 @@ function QSM = simplify_qsm(QSM,MaxOrder,SmallRadii,ReplaceIterations,Plot,Disp)
 % MaxOrder      Maximum branching order, higher order branches removed
 % SmallRadii    Minimum acceptable radius for a branch at its base
 % ReplaceIterations Number of iterations for replacing two concecutive
-%                     cylinders inside one branch with one longer cylinder 
+%                     cylinders inside one branch with one longer cylinder
 % Plot          If true/1, then plots the cylinder models before and
 %                 after the simplification
-% Disp          If Disp == 1, then display the simplication results 
-%                 (the number of cylinders after each step). If 
+% Disp          If Disp == 1, then display the simplication results
+%                 (the number of cylinders after each step). If
 %                 Disp == 2, then display also the treedata results for
 %                 the original and simplified QSMs. If Disp == 0, then
 %                 nothing is displayed.
@@ -47,7 +47,7 @@ function QSM = simplify_qsm(QSM,MaxOrder,SmallRadii,ReplaceIterations,Plot,Disp)
 % 1) Added modification of branch and treedata structures based on the
 %     modified cylinders
 % 2) Added input for plotting and displaying the results
-% 3) Corrected some bugs that could cause errors in some special cases 
+% 3) Corrected some bugs that could cause errors in some special cases
 
 if nargin <= 4
   Plot = 0;
@@ -62,7 +62,7 @@ if Disp == 2
 end
 % Plot the cylinder model before the simplification
 if Plot
-  plot_cylinder_model(QSM.cylinder,'branch',1,20,1)
+  TreeQSM.plotting.plot_cylinder_model(QSM.cylinder,'branch',1,20,1)
 end
 
 %% Maximum branching order
@@ -73,7 +73,7 @@ if Disp >= 1
 end
 
 % Cylinders with branching order up to MaxBranchOrder
-SmallOrder = c.BranchOrder <= MaxOrder; 
+SmallOrder = c.BranchOrder <= MaxOrder;
 N = fieldnames(c);
 n = max(size(N));
 for i = 1:n
@@ -97,7 +97,7 @@ end
 
 %% Small branches
 if nargin >= 3 && SmallRadii > 0
-  
+
   nc = size(c.radius,1);
   % Determine child branches
   BPar = QSM.branch.parent;
@@ -109,7 +109,7 @@ if nargin >= 3 && SmallRadii > 0
       BChi{P} = [BChi{P}; i];
     end
   end
-  
+
   % Remove branches whose radii is too small compared to its parent
   Large = true(nc,1);
   Pass = true(nb,1);
@@ -130,7 +130,7 @@ if nargin >= 3 && SmallRadii > 0
       end
     end
   end
-  
+
   % Modify topology information
   Ind = (1:1:nc)';
   m = nnz(Large);
@@ -139,12 +139,12 @@ if nargin >= 3 && SmallRadii > 0
   c.parent(I) = Ind(c.parent(I));
   I = c.extension > 0;
   c.extension(I) = Ind(c.extension(I));
-  
+
   % Update/reduce cylinders
   for i = 1:n
     c.(N{i}) = c.(N{i})(Large,:);
   end
-  
+
   if Disp >= 1
     nc = nnz(Large);
     disp([' ',num2str(nc),' cylinders after small branch simplification'])
@@ -154,7 +154,7 @@ end
 
 %% Cylinder replacing
 if nargin >= 4 && ReplaceIterations > 0
-  
+
   % Determine child cylinders
   nc = size(c.radius,1);
   CChi = cell(nc,1);
@@ -167,10 +167,10 @@ if nargin >= 4 && ReplaceIterations > 0
       end
     end
   end
-  
+
   % Replace cylinders
   for j = 1:ReplaceIterations
-    
+
     nc = size(c.radius,1);
     Ind = (1:1:nc)';
     Keep = false(nc,1);
@@ -206,7 +206,7 @@ if nargin >= 4 && ReplaceIterations > 0
         V = V(I)+V(J);
         R = sqrt(V./L/pi);
         c.radius(cyls) = R;
-        
+
       else % odd number of cylinders
         I = [1 2:2:t]'; % select 1., 2., 4., 6., ...
         % Correct radii, axes and lengths
@@ -232,7 +232,7 @@ if nargin >= 4 && ReplaceIterations > 0
         R = sqrt(V./L(2:end)/pi);
         c.radius(cyls(2:end)) = R;
       end
-      
+
       if t > 1
         % Modify cylinders
         c.length(cyls) = L;
@@ -248,7 +248,7 @@ if nargin >= 4 && ReplaceIterations > 0
             c.parent(cyls(1)) = par0;
           end
         end
-        
+
         % Correct child branches
         chi = vertcat(CChi{Cyls});
         if ~isempty(chi)
@@ -256,7 +256,7 @@ if nargin >= 4 && ReplaceIterations > 0
           J = Keep(par);
           par = par(~J)-1;
           c.parent(chi(~J)) = par;
-          
+
           par = c.parent(chi);
           rp = c.radius(par);
           sp = c.start(par,:);
@@ -267,18 +267,18 @@ if nargin >= 4 && ReplaceIterations > 0
           ec = sc+[lc.*ac(:,1) lc.*ac(:,2) lc.*ac(:,3)];
           m = length(chi);
           for k = 1:m
-            [d,V,h,B] = distances_to_line(sc(k,:),ap(k,:),sp(k,:));
+            [d,V,h,B] = TreeQSM.tools.distances_to_line(sc(k,:),ap(k,:),sp(k,:));
             V = V/d;
             sc(k,:) = sp(k,:)+rp(k)*V+B;
           end
           ac = ec-sc;
-          [ac,lc] = normalize(ac);
+          [ac,lc] = TreeQSM.tools.normalize(ac);
           c.length(chi) = lc;
           c.start(chi,:) = sc;
           c.axis(chi,:) = ac;
         end
       end
-      
+
       i = i+t;
     end
     % Change topology (parent, extension) indexes
@@ -288,12 +288,12 @@ if nargin >= 4 && ReplaceIterations > 0
     c.parent(I) = Ind(c.parent(I));
     I = c.extension > 0;
     c.extension(I) = Ind(c.extension(I));
-    
+
     % Update/reduce cylinders
     for i = 1:n
       c.(N{i}) = c.(N{i})(Keep,:);
     end
-    
+
     if j < ReplaceIterations
       % Determine child cylinders
       nc = size(c.radius,1);
@@ -309,7 +309,7 @@ if nargin >= 4 && ReplaceIterations > 0
       end
     end
   end
-  
+
   if Disp >= 1
     nc = size(c.radius,1);
     disp([' ',num2str(nc),' cylinders after cylinder replacements'])
@@ -323,7 +323,7 @@ end
 
 %% Updata the QSM
 % Update the branch
-branch = branches(c);
+branch = TreeQSM.main_steps.branches(c);
 
 % Update the treedata
 inputs = QSM.rundata.inputs;
@@ -332,9 +332,9 @@ inputs.plot = 0;
 if Disp == 2
   inputs.disp = 2;
 else
-  inputs.disp = 0;  
+  inputs.disp = 0;
 end
-treedata = update_tree_data(QSM,c,branch,inputs);
+treedata = TreeQSM.tools.update_tree_data(QSM,c,branch,inputs);
 
 % Update the cylinder, branch, and treedata of the QSM
 QSM.cylinder = c;
@@ -343,7 +343,7 @@ QSM.treedata = treedata;
 
 % Plot the cylinder model after the simplification
 if Plot
-  plot_cylinder_model(QSM.cylinder,'branch',2,20,1)
+  TreeQSM.plotting.plot_cylinder_model(QSM.cylinder,'branch',2,20,1)
 end
 
 end % End of main function
@@ -395,7 +395,7 @@ end
 disp('------------')
 disp('  Tree attributes before simplification:')
 for i = 1:m
-  v = change_precision(treedata.(Names{i}));
+  v = TreeQSM.tools.change_precision(treedata.(Names{i}));
   if strcmp(Names{i},'DBHtri')
     disp('  -----')
     disp('  Tree attributes from triangulation:')

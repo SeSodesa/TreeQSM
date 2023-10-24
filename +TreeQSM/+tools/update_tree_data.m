@@ -193,7 +193,7 @@ if inputs.disp == 2
   disp('------------')
   disp('  Tree attributes:')
   for i = 1:m
-    v = change_precision(treedata.(Names{i}));
+    v = TreeQSM.tools.change_precision(treedata.(Names{i}));
     if strcmp(Names{i},'DBHtri')
       disp('  -----')
       disp('  Tree attributes from triangulation:')
@@ -213,118 +213,118 @@ if inputs.plot > 1
   ylabel('Diameter (m)')
   axis tight
   grid on
-  
+
   Q.treedata = treedata;
   subplot(2,4,2)
-  plot_distribution(Q,6,0,0,'VolCylDia')
-  
+  TreeQSM.plotting.plot_distribution(Q,6,0,0,'VolCylDia')
+
   subplot(2,4,3)
-  plot_distribution(Q,6,0,0,'AreCylDia')
-  
+  TreeQSM.plotting.plot_distribution(Q,6,0,0,'AreCylDia')
+
   subplot(2,4,4)
-  plot_distribution(Q,6,0,0,'LenCylDia')
-  
+  TreeQSM.plotting.plot_distribution(Q,6,0,0,'LenCylDia')
+
   subplot(2,4,5)
-  plot_distribution(Q,6,0,0,'VolBranchOrd')
-  
+  TreeQSM.plotting.plot_distribution(Q,6,0,0,'VolBranchOrd')
+
   subplot(2,4,6)
-  plot_distribution(Q,6,0,0,'LenBranchOrd')
-  
+  TreeQSM.plotting.plot_distribution(Q,6,0,0,'LenBranchOrd')
+
   subplot(2,4,7)
-  plot_distribution(Q,6,0,0,'AreBranchOrd')
-  
+  TreeQSM.plotting.plot_distribution(Q,6,0,0,'AreBranchOrd')
+
   subplot(2,4,8)
-  plot_distribution(Q,6,0,0,'NumBranchOrd')
-  
+  TreeQSM.plotting.plot_distribution(Q,6,0,0,'NumBranchOrd')
+
   figure(7)
   subplot(3,3,1)
-  plot_distribution(Q,7,0,0,'VolCylHei')
-  
+  TreeQSM.plotting.plot_distribution(Q,7,0,0,'VolCylHei')
+
   subplot(3,3,2)
-  plot_distribution(Q,7,0,0,'AreCylHei')
-  
+  TreeQSM.plotting.plot_distribution(Q,7,0,0,'AreCylHei')
+
   subplot(3,3,3)
-  plot_distribution(Q,7,0,0,'LenCylHei')
-  
+  TreeQSM.plotting.plot_distribution(Q,7,0,0,'LenCylHei')
+
   subplot(3,3,4)
-  plot_distribution(Q,7,0,0,'VolCylZen')
-  
+  TreeQSM.plotting.plot_distribution(Q,7,0,0,'VolCylZen')
+
   subplot(3,3,5)
-  plot_distribution(Q,7,0,0,'AreCylZen')
-  
+  TreeQSM.plotting.plot_distribution(Q,7,0,0,'AreCylZen')
+
   subplot(3,3,6)
-  plot_distribution(Q,7,0,0,'LenCylZen')
-  
+  TreeQSM.plotting.plot_distribution(Q,7,0,0,'LenCylZen')
+
   subplot(3,3,7)
-  plot_distribution(Q,7,0,0,'VolCylAzi')
-  
+  TreeQSM.plotting.plot_distribution(Q,7,0,0,'VolCylAzi')
+
   subplot(3,3,8)
-  plot_distribution(Q,7,0,0,'AreCylAzi')
-  
+  TreeQSM.plotting.plot_distribution(Q,7,0,0,'AreCylAzi')
+
   subplot(3,3,9)
-  plot_distribution(Q,7,0,0,'LenCylAzi')
-  
+  TreeQSM.plotting.plot_distribution(Q,7,0,0,'LenCylAzi')
+
   figure(8)
   subplot(3,4,1)
-  plot_distribution(Q,8,1,0,'VolBranchDia','VolBranch1Dia')
-  
+  TreeQSM.plotting.plot_distribution(Q,8,1,0,'VolBranchDia','VolBranch1Dia')
+
   subplot(3,4,2)
-  plot_distribution(Q,8,1,0,'AreBranchDia','AreBranch1Dia')
-  
+  TreeQSM.plotting.plot_distribution(Q,8,1,0,'AreBranchDia','AreBranch1Dia')
+
   subplot(3,4,3)
-  plot_distribution(Q,8,1,0,'LenBranchDia','LenBranch1Dia')
-  
+  TreeQSM.plotting.plot_distribution(Q,8,1,0,'LenBranchDia','LenBranch1Dia')
+
   subplot(3,4,4)
-  plot_distribution(Q,8,1,0,'NumBranchDia','NumBranch1Dia')
-  
+  TreeQSM.plotting.plot_distribution(Q,8,1,0,'NumBranchDia','NumBranch1Dia')
+
   subplot(3,4,5)
-  plot_distribution(Q,8,1,0,'VolBranchHei','VolBranch1Hei')
-  
+  TreeQSM.plotting.plot_distribution(Q,8,1,0,'VolBranchHei','VolBranch1Hei')
+
   subplot(3,4,6)
-  plot_distribution(Q,8,1,0,'AreBranchHei','AreBranch1Hei')
-  
+  TreeQSM.plotting.plot_distribution(Q,8,1,0,'AreBranchHei','AreBranch1Hei')
+
   subplot(3,4,7)
-  plot_distribution(Q,8,1,0,'LenBranchHei','LenBranch1Hei')
-  
+  TreeQSM.plotting.plot_distribution(Q,8,1,0,'LenBranchHei','LenBranch1Hei')
+
   subplot(3,4,8)
-  plot_distribution(Q,8,1,0,'NumBranchHei','NumBranch1Hei')
-  
+  TreeQSM.plotting.plot_distribution(Q,8,1,0,'NumBranchHei','NumBranch1Hei')
+
   subplot(3,4,9)
-  plot_distribution(Q,8,1,0,'VolBranchAng','VolBranch1Ang')
-  
+  TreeQSM.plotting.plot_distribution(Q,8,1,0,'VolBranchAng','VolBranch1Ang')
+
   subplot(3,4,10)
-  plot_distribution(Q,8,1,0,'AreBranchAng','AreBranch1Ang')
-  
+  TreeQSM.plotting.plot_distribution(Q,8,1,0,'AreBranchAng','AreBranch1Ang')
+
   subplot(3,4,11)
-  plot_distribution(Q,8,1,0,'LenBranchAng','LenBranch1Ang')
-  
+  TreeQSM.plotting.plot_distribution(Q,8,1,0,'LenBranchAng','LenBranch1Ang')
+
   subplot(3,4,12)
-  plot_distribution(Q,8,1,0,'NumBranchAng','NumBranch1Ang')
-  
+  TreeQSM.plotting.plot_distribution(Q,8,1,0,'NumBranchAng','NumBranch1Ang')
+
   figure(9)
   subplot(2,4,1)
-  plot_distribution(Q,9,1,0,'VolBranchZen','VolBranch1Zen')
-  
+  TreeQSM.plotting.plot_distribution(Q,9,1,0,'VolBranchZen','VolBranch1Zen')
+
   subplot(2,4,2)
-  plot_distribution(Q,9,1,0,'AreBranchZen','AreBranch1Zen')
-  
+  TreeQSM.plotting.plot_distribution(Q,9,1,0,'AreBranchZen','AreBranch1Zen')
+
   subplot(2,4,3)
-  plot_distribution(Q,9,1,0,'LenBranchZen','LenBranch1Zen')
-  
+  TreeQSM.plotting.plot_distribution(Q,9,1,0,'LenBranchZen','LenBranch1Zen')
+
   subplot(2,4,4)
-  plot_distribution(Q,9,1,0,'NumBranchZen','NumBranch1Zen')
-  
+  TreeQSM.plotting.plot_distribution(Q,9,1,0,'NumBranchZen','NumBranch1Zen')
+
   subplot(2,4,5)
-  plot_distribution(Q,9,1,0,'VolBranchAzi','VolBranch1Azi')
-  
+  TreeQSM.plotting.plot_distribution(Q,9,1,0,'VolBranchAzi','VolBranch1Azi')
+
   subplot(2,4,6)
-  plot_distribution(Q,9,1,0,'AreBranchAzi','AreBranch1Azi')
-  
+  TreeQSM.plotting.plot_distribution(Q,9,1,0,'AreBranchAzi','AreBranch1Azi')
+
   subplot(2,4,7)
-  plot_distribution(Q,9,1,0,'LenBranchAzi','LenBranch1Azi')
-  
+  TreeQSM.plotting.plot_distribution(Q,9,1,0,'LenBranchAzi','LenBranch1Azi')
+
   subplot(2,4,8)
-  plot_distribution(Q,9,1,0,'NumBranchAzi','NumBranch1Azi')
+  TreeQSM.plotting.plot_distribution(Q,9,1,0,'NumBranchAzi','NumBranch1Azi')
 end
 
 end % End of main function
@@ -341,13 +341,13 @@ nc = length(Len);
 P = zeros(5*nc,3); % four mid points on the cylinder surface
 t = 0;
 for i = 1:nc
-  [U,V] = orthonormal_vectors(Axe(i,:));
+  [U,V] = TreeQSM.tools.orthonormal_vectors(Axe(i,:));
   U = cylinder.radius(i)*U;
   if cylinder.branch(i) == 1
     % For stem cylinders generate more points
     for k = 1:4
       M = Sta(i,:)+k*Len(i)/4*Axe(i,:);
-      R = rotation_matrix(Axe(i,:),pi/12);
+      R = TreeQSM.tools.rotation_matrix(Axe(i,:),pi/12);
       for j = 1:12
         if j > 1
           U = R*U;
@@ -358,7 +358,7 @@ for i = 1:nc
     end
   else
     M = Sta(i,:)+Len(i)/2*Axe(i,:);
-    R = rotation_matrix(Axe(i,:),pi/4);
+    R = TreeQSM.tools.rotation_matrix(Axe(i,:),pi/4);
     for j = 1:4
       if j > 1
         U = R*U;
@@ -396,8 +396,8 @@ for j = 1:m
     y = X(K,2);
     CX = sum((x(1:n-1)+x(2:n)).*(x(1:n-1).*y(2:n)-x(2:n).*y(1:n-1)))/6/A;
     CY = sum((y(1:n-1)+y(2:n)).*(x(1:n-1).*y(2:n)-x(2:n).*y(1:n-1)))/6/A;
-    
-    V = mat_vec_subtraction(X(:,1:2),[CX CY]);
+
+    V = TreeQSM.tools.mat_vec_subtraction(X(:,1:2),[CX CY]);
     ang = atan2(V(:,2),V(:,1))+pi;
     [ang,I] = sort(ang);
     L = sqrt(sum(V.*V,2));
@@ -430,7 +430,7 @@ x = X(K,1);
 y = X(K,2);
 CX = sum((x(1:n-1)+x(2:n)).*(x(1:n-1).*y(2:n)-x(2:n).*y(1:n-1)))/6/A;
 CY = sum((y(1:n-1)+y(2:n)).*(x(1:n-1).*y(2:n)-x(2:n).*y(1:n-1)))/6/A;
-V = mat_vec_subtraction(Tip(:,1:2),[CX CY]);
+V = TreeQSM.tools.mat_vec_subtraction(Tip(:,1:2),[CX CY]);
 ang = atan2(V(:,2),V(:,1))+pi;
 [ang,I] = sort(ang);
 L = sqrt(sum(V.*V,2));
@@ -454,7 +454,7 @@ end
 treedata.CrownDiamAve = mean(S);
 MaxDiam = 0;
 for i = 1:n
-  V = mat_vec_subtraction([x y],[x(i) y(i)]);
+  V = TreeQSM.tools.mat_vec_subtraction([x y],[x(i) y(i)]);
   L = max(sqrt(sum(V.*V,2)));
   if L > MaxDiam
     MaxDiam = L;
@@ -498,7 +498,7 @@ Hei = branch.height(branches1);
 [Hei,SortOrd] = sort(Hei);
 branches1 = branches1(SortOrd);
 
-% Search the first/lowest branch:  
+% Search the first/lowest branch:
 d = min(0.05,0.05*dbh);
 b = 0;
 if nb > 1
@@ -530,7 +530,7 @@ if b > 0
     end
     chi = vertcat(C{:});
   end
-  
+
   % define crown base height from the ground:
   BaseHeight = max(Sta(:,3)); % Height of the crown base
   for i = 1:length(B)
@@ -543,11 +543,11 @@ if b > 0
     end
   end
   treedata.CrownBaseHeight = BaseHeight-Sta(1,3);
-  
+
   %% Crown length and ratio
   treedata.CrownLength = treedata.TreeHeight-treedata.CrownBaseHeight;
   treedata.CrownRatio = treedata.CrownLength/treedata.TreeHeight;
-  
+
   %% Crown volume from convex hull and alpha shape:
   I = P(:,3) >= BaseHeight;
   X = P(I,:);
@@ -557,7 +557,7 @@ if b > 0
   shp = alphaShape(X(:,1),X(:,2),X(:,3),alp,'HoleThreshold',10000);
   treedata.CrownVolumeAlpha = shp.volume;
 
-else 
+else
   % No branches
   treedata.CrownBaseHeight = treedata.TreeHeight;
   treedata.CrownLength = 0;
@@ -601,7 +601,7 @@ if ~isempty(QSM.triangulation)
       h = V*cylinder.axis(CylInd,:)';
     end
     Len(CylInd-1) = Len(CylInd-1)-h;
-    
+
     TrunkVolMix = treedata.TrunkVolume-...
       1000*pi*sum(Rad(1:CylInd-1).^2.*Len(1:CylInd-1))+QSM.triangulation.volume;
     TrunkAreaMix = treedata.TrunkArea-...

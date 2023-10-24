@@ -1,15 +1,15 @@
 % This file is part of TREEQSM.
-% 
+%
 % TREEQSM is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
-% 
+%
 % TREEQSM is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
-% 
+%
 % You should have received a copy of the GNU General Public License
 % along with TREEQSM.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -23,14 +23,14 @@ function RS = relative_size(P,cover,segment)
 %
 % Copyright (C) 2014-2017 Pasi Raumonen
 % ---------------------------------------------------------------------
-% 
+%
 % Uses existing segmentation and its branching structure to determine
-% relative size of the cover sets distributed over new covers. The idea is 
-% to decrease the relative size as the branch size decreases. This is 
+% relative size of the cover sets distributed over new covers. The idea is
+% to decrease the relative size as the branch size decreases. This is
 % realised so that the relative size at the base of a branch is
 % proportional to the size of the stem's base, measured as number of
 % cover sets in the first few layers. Also when we approach the
-% tip of the branch, the relative size decreases to the minimum. 
+% tip of the branch, the relative size decreases to the minimum.
 % Maximum relative size is 256 at the bottom of the
 % stem and the minimum is 1 at the tip of every branch.
 %
@@ -66,7 +66,7 @@ H = Top-Bot;
 % BaseSize is the relative size of the branch base compared to the stem
 % base, measured as number of cover sets in the first layers of the cover
 % sets. If it is larger than apriori upper limit based on branching order
-% and branch height, then correct to the apriori limit 
+% and branch height, then correct to the apriori limit
 BaseSize = zeros(ns,1);
 % Determine first the base size at the stem
 S = Segs{1};
@@ -87,7 +87,7 @@ for i = 2:ns
     else
         BaseSize(i) = length(S{1})/BaseSize(1)*256;
     end
-    bot = min(P(Cen(S{1}),3)); 
+    bot = min(P(Cen(S{1}),3));
     h = bot-Bot; % height of the segment's base
     BS = ceil(256*(maxO-Ord(i))/maxO*(H-h)/H); % maximum apriori base size
     if BaseSize(i) > BS

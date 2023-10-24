@@ -1,14 +1,14 @@
 function DSP = cubical_averaging(P,CubeSize)
 
 tic
-% Downsamples the given point cloud by averaging points from each 
-% cube of side length CubeSize. 
+% Downsamples the given point cloud by averaging points from each
+% cube of side length CubeSize.
 
 % The vertices of the big cube containing P
 Min = double(min(P));
 Max = double(max(P));
 
-% Number of cubes with edge length "EdgeLength" in the sides 
+% Number of cubes with edge length "EdgeLength" in the sides
 % of the big cube
 N = double(ceil((Max-Min)/CubeSize)+1);
 
@@ -28,7 +28,7 @@ while p <= np
         t = t+1;
     end
     q = q+1;
-    DSP(q,:) = average(P(SortOrd(p:p+t-1),:));
+    DSP(q,:) = TreeQSM.tools.average(P(SortOrd(p:p+t-1),:));
     p = p+t;
 end
 toc

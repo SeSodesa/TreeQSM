@@ -1,7 +1,7 @@
 function [dist,J] = func_grad_circle_centre(P,par,weight)
 
 % ---------------------------------------------------------------------
-% FUNC_GRAD_CIRCLE.M   Function and gradient calculation for 
+% FUNC_GRAD_CIRCLE.M   Function and gradient calculation for
 %                           least-squares circle fit.
 %
 % Version 1.0
@@ -10,15 +10,15 @@ function [dist,J] = func_grad_circle_centre(P,par,weight)
 % Copyright (C) 2017 Pasi Raumonen
 % ---------------------------------------------------------------------
 %
-% Input 
+% Input
 % P         Point cloud
 % par       Circle parameters [x0 y0 r]'
 % weight    Weights for the points. Weight the distances.
-% 
+%
 % Output
 % dist      Signed distances of points to the circle:
-%               dist(i) = sqrt((xi-x0)^2 + (yi-y0)^2) - r, where 
-%               
+%               dist(i) = sqrt((xi-x0)^2 + (yi-y0)^2) - r, where
+%
 % J         Jacobian matrix d dist(i)/d par(j).
 
 

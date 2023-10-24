@@ -293,32 +293,32 @@ for h = 1:nd
   end
 
   %% Generate cover sets
-  cover1 = cover_sets(P,Inputs);
+  cover1 = TreeQSM.main_steps.cover_sets(P,Inputs);
   Time(1) = toc;
   if inputs.disp == 2
-    display_time(Time(1),Time(1),name(1,:),1)
+    TreeQSM.tools.display_time(Time(1),Time(1),name(1,:),1)
   end
 
   %% Determine tree sets and update neighbors
-  [cover1,Base,Forb] = tree_sets(P,cover1,Inputs);
+  [cover1,Base,Forb] = TreeQSM.main_steps.tree_sets(P,cover1,Inputs);
   Time(2) = toc-Time(1);
   if inputs.disp == 2
-    display_time(Time(2),sum(Time(1:2)),name(2,:),1)
+    TreeQSM.tools.display_time(Time(2),sum(Time(1:2)),name(2,:),1)
   end
 
   %% Determine initial segments
-  segment1 = segments(cover1,Base,Forb);
+  segment1 = TreeQSM.main_steps.segments(cover1,Base,Forb);
   Time(3) = toc-sum(Time(1:2));
   if inputs.disp == 2
-    display_time(Time(3),sum(Time(1:3)),name(3,:),1)
+    TreeQSM.tools.display_time(Time(3),sum(Time(1:3)),name(3,:),1)
   end
 
   %% Correct segments
   % Don't remove small segments and add the modified base to the segment
-  segment1 = correct_segments(P,cover1,segment1,Inputs,0,1,1);
+  segment1 = TreeQSM.main_steps.correct_segments(P,cover1,segment1,Inputs,0,1,1);
   Time(4) = toc-sum(Time(1:3));
   if inputs.disp == 2
-    display_time(Time(4),sum(Time(1:4)),name(4,:),1)
+    TreeQSM.tools.display_time(Time(4),sum(Time(1:4)),name(4,:),1)
   end
 
   for i = 1:na
@@ -342,47 +342,47 @@ for h = 1:nd
 
       %% Generate new cover sets
       % Determine relative size of new cover sets and use only tree points
-      RS = relative_size(P,cover1,segment1);
+      RS = TreeQSM.main_steps.relative_size(P,cover1,segment1);
 
       % Generate new cover
-      cover2 = cover_sets(P,Inputs,RS);
+      cover2 = TreeQSM.main_steps.cover_sets(P,Inputs,RS);
       Time(5) = toc;
       if inputs.disp == 2
-          display_time(Time(5),sum(Time(1:5)),name(1,:),1)
+          TreeQSM.tools.display_time(Time(5),sum(Time(1:5)),name(1,:),1)
       end
 
       %% Determine tree sets and update neighbors
-      [cover2,Base,Forb] = tree_sets(P,cover2,Inputs,segment1);
+      [cover2,Base,Forb] = TreeQSM.main_steps.tree_sets(P,cover2,Inputs,segment1);
       Time(6) = toc-Time(5);
       if inputs.disp == 2
-        display_time(Time(6),sum(Time(1:6)),name(2,:),1)
+        TreeQSM.tools.display_time(Time(6),sum(Time(1:6)),name(2,:),1)
       end
 
       %% Determine segments
-      segment2 = segments(cover2,Base,Forb);
+      segment2 = TreeQSM.main_steps.segments(cover2,Base,Forb);
       Time(7) = toc-sum(Time(5:6));
       if inputs.disp == 2
-        display_time(Time(7),sum(Time(1:7)),name(3,:),1)
+        TreeQSM.tools.display_time(Time(7),sum(Time(1:7)),name(3,:),1)
       end
 
       %% Correct segments
       % Remove small segments and the extended bases.
-      segment2 = correct_segments(P,cover2,segment2,Inputs,1,1,0);
+      segment2 = TreeQSM.main_steps.correct_segments(P,cover2,segment2,Inputs,1,1,0);
       Time(8) = toc-sum(Time(5:7));
       if inputs.disp == 2
-        display_time(Time(8),sum(Time(1:8)),name(4,:),1)
+        TreeQSM.tools.display_time(Time(8),sum(Time(1:8)),name(4,:),1)
       end
 
       %% Define cylinders
-      cylinder = cylinders(P,cover2,segment2,Inputs);
+      cylinder = TreeQSM.main_steps.cylinders(P,cover2,segment2,Inputs);
       Time(9) = toc;
       if inputs.disp == 2
-        display_time(Time(9),sum(Time(1:9)),name(5,:),1)
+        TreeQSM.tools.display_time(Time(9),sum(Time(1:9)),name(5,:),1)
       end
 
       if ~isempty(cylinder.radius)
         %% Determine the branches
-        branch = branches(cylinder);
+        branch = TreeQSM.main_steps.branches(cylinder);
 
         %% Compute (and display) model attributes
         T = segment2.segments{1};
@@ -391,15 +391,15 @@ for h = 1:nd
         trunk = P(T,:); % point cloud of the trunk
         % Compute attributes and distibutions from the cylinder model
         % and possibly some from a triangulation
-        [treedata,triangulation] = tree_data(cylinder,branch,trunk,inputs);
+        [treedata,triangulation] = TreeQSM.main_steps.tree_data(cylinder,branch,trunk,inputs);
         Time(10) = toc-Time(9);
         if inputs.disp == 2
-          display_time(Time(10),sum(Time(1:10)),name(6,:),1)
+          TreeQSM.tools.display_time(Time(10),sum(Time(1:10)),name(6,:),1)
         end
 
         %% Compute point model distances
         if inputs.Dist
-          pmdis = point_model_distance(P,cylinder);
+          pmdis = TreeQSM.main_steps.point_model_distance(P,cylinder);
 
           % Display the mean point-model distances and surface coverages
           % for stem, branch, 1branc and 2branch cylinders
@@ -435,7 +435,7 @@ for h = 1:nd
           end
           Time(11) = toc-sum(Time(9:10));
           if inputs.disp == 2
-            display_time(Time(11),sum(Time(1:11)),name(7,:),1)
+            TreeQSM.tools.display_time(Time(11),sum(Time(1:11)),name(7,:),1)
           end
         end
 
@@ -486,16 +486,16 @@ for h = 1:nd
             str = [inputs.name,'_t',num2str(inputs.tree),'_m',...
               num2str(inputs.model)];
           end
-          save_model_text(qsm,str)
+          TreeQSM.tools.save_model_text(qsm,str)
         end
 
         %% Plot models and segmentations
         if inputs.plot >= 1
           if inputs.Tria
-            plot_models_segmentations(P,cover2,segment2,cylinder,trunk,...
+            TreeQSM.plotting.plot_models_segmentations(P,cover2,segment2,cylinder,trunk,...
                 triangulation)
           else
-            plot_models_segmentations(P,cover2,segment2,cylinder)
+            TreeQSM.plotting.plot_models_segmentations(P,cover2,segment2,cylinder)
           end
           if nd > 1 || na > 1 || ni > 1
             pause

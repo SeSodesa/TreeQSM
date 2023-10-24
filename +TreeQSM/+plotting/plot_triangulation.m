@@ -2,8 +2,8 @@ function plot_triangulation(QSM,fig,nf,AllTree)
 
 % Plots the triangulation model of the stem's bottom part and the cylinder
 % model (rest of the stem or the rest of the tree). The optional inputs
-% "fig", "nf", "All" are the figure number, number of facets for the 
-% cylinders, and if All = 1, then all the tree is plotted. 
+% "fig", "nf", "All" are the figure number, number of facets for the
+% cylinders, and if All = 1, then all the tree is plotted.
 
 n = nargin;
 if n < 4
@@ -32,7 +32,7 @@ if AllTree
 else
     Ind = (CylInd:1:C(end))';
 end
-plot_cylinder_model(QSM.cylinder,fig,nf,1,'branch',Ind)
+TreeQSM.plotting.plot_cylinder_model(QSM.cylinder,fig,nf,1,'branch',Ind)
 axis equal
 hold off
 alpha(1)

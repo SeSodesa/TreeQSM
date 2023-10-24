@@ -144,10 +144,10 @@ for i = 1:nc
   % Rotate
   ang = real(acos(Axe(i,3)));
   Axis = cross([0 0 1]',Axe(i,:)');
-  Rot = rotation_matrix(Axis,ang);
+  Rot = TreeQSM.tools.rotation_matrix(Axis,ang);
   C = (Rot*C')';
   % Translate
-  C = mat_vec_subtraction(C,-Sta(i,:));
+  C = TreeQSM.tools.mat_vec_subtraction(C,-Sta(i,:));
   Vert(t:t+2*n-1,:) = C;
   Facets(f:f+n-1,:) = Cir{n,2}+t-1;
   if Color == 1

@@ -1,7 +1,7 @@
 function plot_scatter(P,C,fig,ms)
 
 % A scatter plot where the color of each 2d or 3d point is specified by a
-% number. 
+% number.
 %
 % Inputs:
 % P     point cloud
@@ -9,7 +9,7 @@ function plot_scatter(P,C,fig,ms)
 % fig   figure number
 % ms    marker size
 
-S = normalize(C);
+S = TreeQSM.tools.normalize(C);
 figure(fig)
 if size(P,2) == 3
     scatter3(P(:,1),P(:,2),P(:,3),ms*ones(size(P,1),1),C,'filled')

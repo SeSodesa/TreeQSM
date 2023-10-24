@@ -1,15 +1,15 @@
 % This file is part of TREEQSM.
-% 
+%
 % TREEQSM is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
-% 
+%
 % TREEQSM is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
-% 
+%
 % You should have received a copy of the GNU General Public License
 % along with TREEQSM.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -25,14 +25,14 @@ function save_model_text(QSM,savename)
 % Copyright (C) 2013-2020 Pasi Raumonen
 % ---------------------------------------------------------------------
 
-% Save the cylinder, branch, and treedata structures in text-formats (.txt) 
+% Save the cylinder, branch, and treedata structures in text-formats (.txt)
 % into /result-folder with the input "savename" defining the file names:
 % 'cylinder_',savename,'.txt'
 % 'branch_',savename,'.txt'
 % 'treedata_',savename,'.txt'
-% !!! Notice that only part of the treedata, the single number tree 
+% !!! Notice that only part of the treedata, the single number tree
 % attributes are saved in the text-file.
-% Every user can change this code easily to define what is saved into 
+% Every user can change this code easily to define what is saved into
 % their text-files.
 
 % Changes from version 1.0.0 to 1.1.0, 17 Aug 2020:
@@ -89,12 +89,12 @@ end
 n = n-1;
 Names = Names(1:n);
 
-TreeData = zeros(n,1); 
+TreeData = zeros(n,1);
 % TreeData contains TotalVolume, TrunkVolume, BranchVolume, etc
 for i = 1:n
     TreeData(i) = treedata.(Names{i,:});
 end
-TreeData = change_precision(TreeData); % use less decimals
+TreeData = TreeQSM.tools.change_precision(TreeData); % use less decimals
 NamesD = string(Names);
 
 %% Save the data as text-files

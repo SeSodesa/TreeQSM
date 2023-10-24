@@ -34,7 +34,7 @@ if ~isempty(Curve)
   Ind = (1:1:n)'; % indexes of the line elements
   if dim == 2 % 2d curves
     % directions (unit vectors) of the line elements:
-    DirLines = [1./L.*V(:,1) 1./L.*V(:,2)]; 
+    DirLines = [1./L.*V(:,1) 1./L.*V(:,2)];
     Intersect = false;
     if nargout == 1 % check only if the curve intersects
       while i <= n-1 && ~Intersect
@@ -76,13 +76,13 @@ if ~isempty(Curve)
           if x(1) >= 0 && x(1) <= L(j) && x(2) >= 0 && x(2) <= L(i)
             Intersect = true;
             % which line elements cross element i:
-            IntersectLines{i,1} = [IntersectLines{i,1}; j]; 
+            IntersectLines{i,1} = [IntersectLines{i,1}; j];
             % which line elements cross element j:
-            IntersectLines{j,1} = [IntersectLines{j,1}; i]; 
+            IntersectLines{j,1} = [IntersectLines{j,1}; i];
             % distances along element i to intersection points:
-            IntersectLines{i,2} = [IntersectLines{i,2}; x(1)]; 
+            IntersectLines{i,2} = [IntersectLines{i,2}; x(1)];
             % distances along element j to intersection points:
-            IntersectLines{j,2} = [IntersectLines{j,2}; x(2)]; 
+            IntersectLines{j,2} = [IntersectLines{j,2}; x(2)];
           end
         end
       end
@@ -106,7 +106,7 @@ if ~isempty(Curve)
           I = Ind > i+1 & Ind < n;
         end
         % Solve for possible intersection points
-        [~,DistOnRay,DistOnLines] = distances_between_lines(...
+        [~,DistOnRay,DistOnLines] = TreeQSM.tools.distances_between_lines(...
           Curve(i,:),DirLines(i,:),Curve(I,:),DirLines(I,:));
         if any(DistOnRay >= 0 & DistOnRay <= L(i) &...
             DistOnLines > 0 & DistOnLines <= L(I))
@@ -126,7 +126,7 @@ if ~isempty(Curve)
           I = Ind > i+1 & Ind < n;
         end
         % Solve for possible intersection points
-        [D,DistOnRay,DistOnLines] = distances_between_lines(...
+        [D,DistOnRay,DistOnLines] = TreeQSM.tools.distances_between_lines(...
           Curve(i,:),DirLines(i,:),Curve(I,:),DirLines(I,:));
         if any(DistOnRay >= 0 & DistOnRay <= L(i) & ...
             DistOnLines > 0 & DistOnLines <= L(I))

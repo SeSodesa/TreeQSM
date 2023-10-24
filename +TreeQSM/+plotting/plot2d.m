@@ -1,6 +1,6 @@
 function h = plot2d(X,Y,fig,strtit,strx,stry,leg,E)
 
-% 2D-plots, where the data (X and Y), figure number, title, xlabel, ylabel, 
+% 2D-plots, where the data (X and Y), figure number, title, xlabel, ylabel,
 % legends and error bars can be specied with the inputs.
 
 lw = 1.5; % linewidth
@@ -119,7 +119,7 @@ if nargin <= 7
             hold off
         end
     end
-    
+
 else
     % plots with errorbars
     if ~iscell(Y)

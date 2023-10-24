@@ -1,15 +1,15 @@
 % This file is part of TREEQSM.
-% 
+%
 % TREEQSM is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
-% 
+%
 % TREEQSM is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
-% 
+%
 % You should have received a copy of the GNU General Public License
 % along with TREEQSM.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -24,9 +24,9 @@ function segment = segments(cover,Base,Forb)
 % Copyright (C) 2013-2017 Pasi Raumonen
 % ---------------------------------------------------------------------
 
-% Segments the tree into branches and records their parent-child-relations. 
+% Segments the tree into branches and records their parent-child-relations.
 % Bifurcations are recognized by studying connectivity of a "study"
-% region moving along the tree. In case of multiple connected components 
+% region moving along the tree. In case of multiple connected components
 % in "study", the components are classified as the continuation and branches.
 %
 % Inputs:
@@ -70,25 +70,25 @@ ForbAll(Forb) = true;
 ForbAll(Base) = true;
 Forb = ForbAll;      % The forbidden sets for the segment under expansion
 
-Continue = true; % True as long as the component can be segmented further 
+Continue = true; % True as long as the component can be segmented further
 NewSeg = true;   % True if the first Cut for the current segment
 nl = 1;          % The number of cover set layers currently in the segment
 
 % Segmenting stops when there are no more segments to be found
 while Continue && (b < nb)
-    
+
     % Update the forbidden sets
     Forb(Seg{nl}) = true;
-    
+
     % Define the study
     Cut = define_cut(Nei,Seg{nl},Forb,Fal);
     CutSize = length(Cut);
-    
+
     if NewSeg
         NewSeg = false;
         ns = min(CutSize,6);
     end
-    
+
     % Define the components of cut and study regions
     if CutSize > 0
         CutComps = cut_components(Nei,Cut,CutSize,Fal,Fal);
@@ -101,7 +101,7 @@ while Continue && (b < nb)
     else
         nc = 0;
     end
-    
+
     % Classify study region components
     if nc == 1
         % One component, continue expansion of the current segment
@@ -114,7 +114,7 @@ while Continue && (b < nb)
     elseif nc > 1
         % Classify the components of the Study region
         Class = component_classification(CompSize,Cont,BaseSize,CutSize);
-        
+
         for i = 1:nc
             if Class(i) == 1
                 Base = Bases{i};
@@ -129,7 +129,7 @@ while Continue && (b < nb)
                 SChi{s}(NChi(s)) = b;
             end
         end
-        
+
         % Define the new cut.
         % If the cut is empty, determine the new base
         if isempty(Cut)
@@ -153,14 +153,14 @@ while Continue && (b < nb)
             nl = nl+1;
             Seg{nl} = Cut;
         end
-    
+
     else
         % If the study region has zero size, then the current segment is
         % complete and determine the base of the next segment
         Segs{s} = Seg(1:nl);
         S = vertcat(Seg{1:nl});
         ForbAll(S) = true;
-        
+
         if s < b
             s = s+1;
             Seg{1} = SBas{s};
@@ -204,10 +204,10 @@ function Cut = define_cut(Nei,CutPre,Forb,Fal)
 
 % Defines the "Cut" region
 Cut = vertcat(Nei{CutPre});
-Cut = unique_elements(Cut,Fal);
+Cut = TreeQSM.tools.unique_elements(Cut,Fal);
 I = Forb(Cut);
 Cut = Cut(~I);
-end % End of function 
+end % End of function
 
 
 function [Components,CompSize] = cut_components(Nei,Cut,CutSize,Fal,False)
@@ -281,7 +281,7 @@ else
             Fal(Added) = false;
             t = t+a;
             Ext = vertcat(Nei{Added});
-            Ext = unique_elements(Ext,False);
+            Ext = TreeQSM.tools.unique_elements(Ext,False);
             I = Fal(Ext);
             Added = Ext(I);
             a = length(Added);
@@ -317,7 +317,7 @@ if ns >= 2
     while i < ns
         Forb(N) = true;
         N = vertcat(Nei{N});
-        N = unique_elements(N,Fal);
+        N = TreeQSM.tools.unique_elements(N,Fal);
         I = Forb(N);
         N = N(~I);
         if ~isempty(N)
@@ -353,7 +353,7 @@ while i <= nc
         Comp(1:a) = C;
         Fal(C) = false;
         if a > 1
-            Add = unique_elements(vertcat(Nei{C}),False);
+            Add = TreeQSM.tools.unique_elements(vertcat(Nei{C}),False);
         else
             Add = Nei{C};
         end
@@ -366,7 +366,7 @@ while i <= nc
             Fal(Add) = false;
             t = t+a;
             Add = vertcat(Nei{Add});
-            Add = unique_elements(Add,False);
+            Add = TreeQSM.tools.unique_elements(Add,False);
             I = Fal(Add);
             Add = Add(I);
             a = length(Add);
@@ -405,7 +405,7 @@ if k > 1
     Fal(Study{1}) = true;
     for i = 1:k
         % Determine the size of the base of the components
-        Set = unique_elements([Components{i}; Study{1}],False);
+        Set = TreeQSM.tools.unique_elements([Components{i}; Study{1}],False);
         False(Components{i}) = true;
         I = False(Set)&Fal(Set);
         False(Components{i}) = false;
@@ -418,14 +418,14 @@ if k > 1
     Forb(study) = true;
     for i = 1:k
         % Determine if the component can be extended
-        Set = unique_elements([Components{i}; Study{ns}],False);
+        Set = TreeQSM.tools.unique_elements([Components{i}; Study{ns}],False);
         False(Components{i}) = true;
         I = False(Set)&Fal(Set);
         False(Components{i}) = false;
         Set = Set(I);
         if ~isempty(Set)
             N = vertcat(Nei{Set});
-            N = unique_elements(N,False);
+            N = TreeQSM.tools.unique_elements(N,False);
             I = Forb(N);
             N = N(~I);
             if isempty(N)

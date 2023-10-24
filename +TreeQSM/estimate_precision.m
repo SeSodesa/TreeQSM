@@ -124,9 +124,9 @@ DataCV = DataS./DataM*100;
 %% Display some data about optimal models
 % Decrease the number of non-zero decimals
 for j = 1:nt
-  DataM(:,j) = change_precision(DataM(:,j));
-  DataS(:,j) = change_precision(DataS(:,j));
-  DataCV(:,j) = change_precision(DataCV(:,j));
+  DataM(:,j) = TreeQSM.tools.change_precision(DataM(:,j));
+  DataS(:,j) = TreeQSM.tools.change_precision(DataS(:,j));
+  DataCV(:,j) = TreeQSM.tools.change_precision(DataCV(:,j));
 end
 
 % Display optimal inputs, model and attributes for each tree

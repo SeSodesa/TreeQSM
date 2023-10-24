@@ -1,15 +1,15 @@
 % This file is part of TREEQSM.
-% 
+%
 % TREEQSM is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
-% 
+%
 % TREEQSM is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
-% 
+%
 % You should have received a copy of the GNU General Public License
 % along with TREEQSM.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -25,39 +25,39 @@ function Pass = filtering(P,inputs)
 % ---------------------------------------------------------------------
 
 % Filters the point cloud as follows:
-% 
+%
 % 1) the possible NaNs are removed.
-% 
-% 2) (optional, done if filter.k > 0) Statistical kth-nearest neighbor 
+%
+% 2) (optional, done if filter.k > 0) Statistical kth-nearest neighbor
 % distance outlier filtering based on user defined "k" (filter.k) and
-% multiplier for standard deviation (filter.nsigma): Determines the 
-% kth-nearest neighbor distance for all points and then removes the points 
-% whose distances are over average_distance + nsigma*std. Computes the 
+% multiplier for standard deviation (filter.nsigma): Determines the
+% kth-nearest neighbor distance for all points and then removes the points
+% whose distances are over average_distance + nsigma*std. Computes the
 % statistics for each meter layer in vertical direction so that the
 % average distances and SDs can change as the point density decreases.
-% 
-% 3) (optional, done if filter.radius > 0) Statistical point density 
-% filtering based on user defined ball radius (filter.radius) and multiplier 
+%
+% 3) (optional, done if filter.radius > 0) Statistical point density
+% filtering based on user defined ball radius (filter.radius) and multiplier
 % for standard deviation (filter.nsigma): Balls of radius "filter.radius"
 % centered at each point are defined for all points and the number of
-% points included ("point density") are computed and then removes the points 
-% whose density is smaller than average_density - nsigma*std. Computes the 
+% points included ("point density") are computed and then removes the points
+% whose density is smaller than average_density - nsigma*std. Computes the
 % statistics for each meter layer in vertical direction so that the
 % average densities and SDs can change as the point density decreases.
-% 
+%
 % 4) (optional, done if filter.ncomp > 0) Small component filtering based
 % on user defined cover (filter.PatchDiam1, filter.BallRad1) and threshold
 % (filter.ncomp): Covers the point cloud and determines the connected
 % components of the cover and removes the points from the small components
 % that have less than filter.ncomp cover sets.
 %
-% 5) (optional, done if filter.EdgeLength > 0) cubical downsampling of the 
-% point cloud based on user defined cube size (filter.EdgeLength): 
+% 5) (optional, done if filter.EdgeLength > 0) cubical downsampling of the
+% point cloud based on user defined cube size (filter.EdgeLength):
 % selects randomly one point from each cube
 %
-% Does the filtering in the above order and thus always applies the next 
-% fitering to the point cloud already filtered by the previous methods. 
-% Statistical kth-nearest neighbor distance outlier filtering and the 
+% Does the filtering in the above order and thus always applies the next
+% fitering to the point cloud already filtered by the previous methods.
+% Statistical kth-nearest neighbor distance outlier filtering and the
 % statistical point density filtering are meant to be exlusive to each
 % other.
 %
@@ -72,7 +72,7 @@ function Pass = filtering(P,inputs)
 %                         Used in both the knn and the density filtering
 %   filter.ncomp        Threshold number of components in the small
 %                         component filtering
-%   filter.PatchDiam1   Defines the patch/cover set size for the component 
+%   filter.PatchDiam1   Defines the patch/cover set size for the component
 %                         filtering
 %   filter.BallRad1     Defines the neighbors for the component filtering
 %   filter.plot         If true, plots the filtered point cloud
@@ -82,13 +82,13 @@ function Pass = filtering(P,inputs)
 
 % Changes from version 2.0.0 to 3.0.0, 3 May 2022:
 % Major changes and additions.
-% 1) Added two new filtering options: statistical kth-nearest neighbor 
+% 1) Added two new filtering options: statistical kth-nearest neighbor
 %    distance outlier filtering and cubical downsampling.
 % 2) Changed the old point density filtering, which was based on given
 %    threshold, into statistical point density filtering, where the
 %    threshold is based on user defined statistical measure
 % 3) All the input parameters are given by "inputs"-structure that can be
-%    defined by "create_input" script   
+%    defined by "create_input" script
 % 4) Streamlined the coding and what is displayed
 
 %% Initial data processing
@@ -114,7 +114,7 @@ F = ~any(isnan(P),2);
 if nnz(F) < np
   disp(['  Points with NaN removed:  ',num2str(np-nnz(Pass))])
   ind = ind(F);
-end 
+end
 
 %% Statistical kth-nearest neighbor distance outlier filtering
 if inputs.filter.k > 0
@@ -124,7 +124,7 @@ if inputs.filter.k > 0
   [~, kNNdist] = knnsearch(Q,Q,'dist','euclidean','k',inputs.filter.k);
   kNNdist = kNNdist(:,end);
 
-  % Change the threshold kNNdistance according the average and standard 
+  % Change the threshold kNNdistance according the average and standard
   % deviation for every vertical layer of 1 meter in height
   hmin = min(Q(:,3));
   hmax = max(Q(:,3));
@@ -149,7 +149,7 @@ if inputs.filter.radius > 0
   np = size(Q,1);
 
   % Partition the point cloud into cubes
-  [partition,CC] = cubical_partition(Q,inputs.filter.radius);
+  [partition,CC] = TreeQSM.tools.cubical_partition(Q,inputs.filter.radius);
 
   % Determine the number of points inside a ball for each point
   NumOfPoints = zeros(np,1);
@@ -168,7 +168,7 @@ if inputs.filter.radius > 0
     end
   end
 
-  % Change the threshold point density according the average and standard 
+  % Change the threshold point density according the average and standard
   % deviation for every vertical layer of 1 meter in height
   hmin = min(Q(:,3));
   hmax = max(Q(:,3));
@@ -195,10 +195,10 @@ if inputs.filter.ncomp > 0
   input.nmin1 = 0;
   Q = P(ind,:);
   np = size(Q,1);
-  cover = cover_sets(Q,input);
+  cover = TreeQSM.main_steps.cover_sets(Q,input);
 
   % Determine the separate components
-  Components = connected_components(cover.neighbor,0,inputs.filter.ncomp);
+  Components = TreeQSM.tools.connected_components(cover.neighbor,0,inputs.filter.ncomp);
 
   % The filtering
   B = vertcat(Components{:}); % patches in the components
@@ -213,7 +213,7 @@ end
 if inputs.filter.EdgeLength > 0
   Q = P(ind,:);
   np = size(Q,1);
-  F = cubical_downsampling(Q,inputs.filter.EdgeLength);
+  F = TreeQSM.tools.cubical_downsampling(Q,inputs.filter.EdgeLength);
   ind = ind(F);
   disp(['  Points removed with downsampling:  ',num2str(np-length(ind))])
 end
@@ -227,6 +227,6 @@ disp(['  Points left: ',num2str(np)])
 
 %% Plot the filtered and unfiltered point clouds
 if inputs.filter.plot
-  plot_comparison(P(Pass,:),P(~Pass,:),1,1,1)
-  plot_point_cloud(P(Pass,:),2,1)
+  TreeQSM.plotting.plot_comparison(P(Pass,:),P(~Pass,:),1,1,1)
+  TreeQSM.plotting.plot_point_cloud(P(Pass,:),2,1)
 end

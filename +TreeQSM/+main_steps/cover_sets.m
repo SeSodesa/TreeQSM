@@ -52,10 +52,10 @@ function cover = cover_sets(P,inputs,RelSize)
 %                     covers. Needed if "RelSize" is given as input.
 %   PatchDiam2Max   Maximum diameter of cover sets for variable-size
 %                     covers. Needed if "RelSize" is given as input.
-% 	BallRad1    Radius of the balls used to generate the uniform cover. 
+% 	BallRad1    Radius of the balls used to generate the uniform cover.
 %                   These balls are also used to determine the neighbors
-%   BallRad2    Maximum radius of the balls used to generate the 
-%                   varibale-size cover. 
+%   BallRad2    Maximum radius of the balls used to generate the
+%                   varibale-size cover.
 %   nmin1, nmin2    Minimum number of points in a BallRad1- and
 %                       BallRad2-balls
 % RelSize   Relative cover set size for each point
@@ -88,13 +88,13 @@ if nargin == 2
   PatchDiamMax = double(inputs.PatchDiam1);
   nmin = double(inputs.nmin1);
   % Partition the point cloud into cubes for quick neighbor search
-  [partition,CC] = cubical_partition(P,BallRad);
+  [partition,CC] = TreeQSM.tools.cubical_partition(P,BallRad);
 
   % Generate the balls
   Radius = BallRad^2;
   MaxDist = PatchDiamMax^2;
   % random permutation of points, produces different covers for the same inputs:
-  RandPerm = randperm(np); 
+  RandPerm = randperm(np);
   for i = 1:np
     if NotExa(RandPerm(i))
       Q = RandPerm(i); % the center/seed point of the current cover set
@@ -112,7 +112,7 @@ if nargin == 2
         core = (d < MaxDist); % the core points of the cover set
         NotExa(ball(core)) = false; % mark points as examined
         % define new ball:
-        nb = nb+1; 
+        nb = nb+1;
         Ball{nb} = ball;
         Cen(nb) = Q;
         % Select which points belong to this ball, i.e. are closer this
@@ -121,8 +121,8 @@ if nargin == 2
         closer = d < D; % which points are closer to this seed
         ball = ball(closer); % define the ball
         % update the ball and distance information of the points
-        Dist(ball) = d(closer); 
-        BoP(ball) = nb; 
+        Dist(ball) = d(closer);
+        BoP(ball) = nb;
       end
     end
   end
@@ -135,18 +135,18 @@ else
   nmin = double(inputs.nmin2);
   MRS = PatchDiamMin/PatchDiamMax;
   % minimum radius
-  r = double(1.5*(double(min(RelSize))/256*(1-MRS)+MRS)*BallRad+1e-5); 
+  r = double(1.5*(double(min(RelSize))/256*(1-MRS)+MRS)*BallRad+1e-5);
   NE = 1+ceil(BallRad/r);
   if NE > 4
     r = PatchDiamMax/4;
     NE = 1+ceil(BallRad/r);
   end
-  [Partition,CC,~,Cubes] = cubical_partition(P,r,NE);
+  [Partition,CC,~,Cubes] = TreeQSM.tools.cubical_partition(P,r,NE);
 
   I = RelSize == 0; % Don't use points with no size determined
   NotExa(I) = false;
 
-  % Define random permutation of points (results in different covers for 
+  % Define random permutation of points (results in different covers for
   % same input) so that first small sets are generated
   RandPerm = zeros(np,1,'uint32');
   I = RelSize <= 32;
@@ -198,7 +198,7 @@ else
         core = (d < MaxDist^2); % the core points of the cover set
         NotExa(ball(core)) = false; % mark points as examined
         % define new ball:
-        nb = nb+1; 
+        nb = nb+1;
         Ball{nb} = ball;
         Cen(nb) = Q;
         % Select which points belong to this ball, i.e. are closer this
@@ -207,8 +207,8 @@ else
         closer = d < D; % which points are closer to this seed
         ball = ball(closer); % define the ball
         % update the ball and distance information of the points
-        Dist(ball) = d(closer); 
-        BoP(ball) = nb; 
+        Dist(ball) = d(closer);
+        BoP(ball) = nb;
       end
     end
   end

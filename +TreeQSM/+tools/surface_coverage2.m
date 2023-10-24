@@ -1,11 +1,11 @@
 function SurfCov = surface_coverage2(Axis,Len,Vec,height,nl,ns)
 
-% Computes surface coverage (number between 0 and 1) of points on cylinder 
-% surface defined by "Axis" and "Len". "Vec" are the vectors connecting 
-% points to the Axis and "height" are the heights of the points from 
+% Computes surface coverage (number between 0 and 1) of points on cylinder
+% surface defined by "Axis" and "Len". "Vec" are the vectors connecting
+% points to the Axis and "height" are the heights of the points from
 % the base of the cylinder
 
-[U,W] = orthonormal_vectors(Axis);
+[U,W] = TreeQSM.tools.orthonormal_vectors(Axis);
 Vec = Vec*[U W];
 ang = atan2(Vec(:,2),Vec(:,1))+pi;
 I = ceil(height/Len*nl);

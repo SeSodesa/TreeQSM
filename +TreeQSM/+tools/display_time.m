@@ -3,12 +3,12 @@ function display_time(T1,T2,string,display)
 % Display the two times given. "T1" is the time named with the "string" and
 % "T2" is named "Total".
 
-% Changes 12 Mar 2018: moved the if statement with display from the end to 
-%                      the beginning 
+% Changes 12 Mar 2018: moved the if statement with display from the end to
+%                      the beginning
 
 if display
-    [tmin,tsec] = sec2min(T1);
-    [Tmin,Tsec] = sec2min(T2);
+    [tmin,tsec] = TreeQSM.tools.sec2min(T1);
+    [Tmin,Tsec] = TreeQSM.tools.sec2min(T2);
     if tmin < 60 && Tmin < 60
         if tmin < 1 && Tmin < 1
             str = [string,' ',num2str(tsec),' sec.   Total: ',num2str(Tsec),' sec'];

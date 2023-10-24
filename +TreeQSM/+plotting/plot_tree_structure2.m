@@ -1,7 +1,7 @@
 function plot_tree_structure2(P,Bal,Segs,SChi,fig,ms,BO,segind)
 
 % Plots the branch-segmented tree point cloud so that each branching order
-% has its own color Blue = trunk, green = 1st-order branches, 
+% has its own color Blue = trunk, green = 1st-order branches,
 % red = 2nd-order branches, etc.
 %
 % Inputs
@@ -15,8 +15,8 @@ function plot_tree_structure2(P,Bal,Segs,SChi,fig,ms,BO,segind)
 % segind    Index of the segment where the plotting of tree structure
 %                   starts. If segnum = 1 and BO = 0, then plots the whole
 %                   tree. If segnum = 1 and B0 = 2, then plots the stem and
-%                   the 1st-order branches. If segnum = 2 and BO = 0, then 
-%                   plots the branch whose index is 2 and all its sub-branches. 
+%                   the 1st-order branches. If segnum = 2 and BO = 0, then
+%                   plots the branch whose index is 2 and all its sub-branches.
 
 
 col = [

@@ -2,7 +2,7 @@
 function cyl = least_squares_axis(P,Axis,Point0,Rad0,weight)
 
 % ---------------------------------------------------------------------
-% LEAST_SQUARES_AXIS.M   Least-squares cylinder axis fitting using 
+% LEAST_SQUARES_AXIS.M   Least-squares cylinder axis fitting using
 %                         Gauss-Newton when radius and point are given
 %
 % Version 1.0
@@ -10,22 +10,22 @@ function cyl = least_squares_axis(P,Axis,Point0,Rad0,weight)
 %
 % Copyright (C) 2017-2021 Pasi Raumonen
 % ---------------------------------------------------------------------
-% Input    
+% Input
 % P         3d point cloud
 % Axis0     Initial axis estimate (1 x 3)
 % Point0    Initial estimate of axis point (1 x 3)
 % Rad0      Initial estimate of the cylinder radius
 % weight    (Optional) Weights for each point
-% 
+%
 % Output
 % cyl       Structure array with the following fields
 %   axis      Cylinder axis (optimized here)
 %   radius    Radius of the cylinder (from the input)
 %   start     Axis point (from the input)
 %   mad       Mean absolute distance of the points to the cylinder surface
-%   SurfCov   Surface coverage, how much of the cylinder surface is covered 
+%   SurfCov   Surface coverage, how much of the cylinder surface is covered
 %               with points
-%   conv      If conv = 1, the algorithm has converged 
+%   conv      If conv = 1, the algorithm has converged
 %   rel       If rel = 1, the algorithm has reliable answer in terms of
 %               matrix inversion with a good enough condition number
 % ---------------------------------------------------------------------
@@ -41,65 +41,65 @@ rel = true; % are the results reliable, system matrix not badly conditioned
 if nargin == 4
     weight = ones(size(P,1),1);
 end
-Rot0 = rotate_to_z_axis(Axis);
+Rot0 = TreeQSM.least_squares_fitting.rotate_to_z_axis(Axis);
 Pt = (P-Point0)*Rot0';
 
 Par = [0 0 0 0 Rad0]';
 
 %% Gauss-Newton iterations
 while iter < maxiter && ~conv && rel
-    
+
     % Calculate the distances and Jacobian
-    [dist,J] = func_grad_axis(Pt,Par);
-    
+    [dist,J] = TreeQSM.least_squares_fitting.func_grad_axis(Pt,Par);
+
     % Calculate update step and gradient.
     SS0 = norm(dist); % Squared sum of the distances
-    % solve for the system of equations: 
+    % solve for the system of equations:
     % par(i+1) = par(i) - (J'J)^(-1)*J'd(par(i))
     A = J'*J;
     b = J'*dist;
     warning off
     p = -A\b; % solve for the system of equations
     warning on
-    
+
     % Update
     par = par+p;
-    
+
     % Check if the updated parameters lower the squared sum value
     Par = [0; 0; par; Rad0];
-    dist = func_grad_axis(Pt,Par);
+    dist = TreeQSM.least_squares_fitting.func_grad_axis(Pt,Par);
     SS1 = norm(dist);
     if SS1 > SS0
         % Update did not decreased the squared sum, use update with much
         % shorter update step
         par = par-0.95*p;
         Par = [0; 0; par; Rad0];
-        dist = func_grad_axis(Pt,Par);
+        dist = TreeQSM.least_squares_fitting.func_grad_axis(Pt,Par);
         SS1 = norm(dist);
     end
-    
+
     % Check reliability
     rel = true;
     if rcond(A) < 10000*eps
         rel = false;
     end
-    
+
     % Check convergence
     if abs(SS0-SS1) < 1e-5
         conv = true;
     end
-    
+
     iter = iter+1;
 end
 
 %% Output
-% Inverse transformation to find axis and point on axis 
+% Inverse transformation to find axis and point on axis
 % corresponding to original data
-Rot = form_rotation_matrices(par);
+Rot = TreeQSM.least_squares_fitting.form_rotation_matrices(par);
 Axis = Rot0'*Rot'*[0 0 1]'; % axis direction
 
 % Compute the point distances to the axis
-[dist,~,h] = distances_to_line(P,Axis,Point0); 
+[dist,~,h] = TreeQSM.tools.distances_to_line(P,Axis,Point0);
 dist = dist-Rad0; % distances without weights
 Len = max(h)-min(h);
 
@@ -118,13 +118,13 @@ if ~any(isnan(par)) && rel && conv
   ns = ceil(2*pi*Rad0/res);
   ns = max(ns,8);
   ns = min(36,ns);
-  SurfCov = single(surface_coverage(P,Axis,Point0,nl,ns,0.8*Rad0));
+  SurfCov = single(TreeQSM.tools.surface_coverage(P,Axis,Point0,nl,ns,0.8*Rad0));
 else
   SurfCov = single(0);
 end
 
 
-%% Define the output 
+%% Define the output
 clear cir
 cyl.radius = Rad0;
 cyl.start = Point0;

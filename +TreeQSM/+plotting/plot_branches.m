@@ -62,7 +62,7 @@ for i = 1:ns
     if i == 2
         hold on
     end
-    S = vertcat(Bal{Seg{segments(i)}});
-    plot3(P(S,1),P(S,2),P(S,3),'.','Color',col(segments(i),:),'Markersize',ms)
+    S = vertcat(Bal{Seg{TreeQSM.main_steps.segments(i)}});
+    plot3(P(S,1),P(S,2),P(S,3),'.','Color',col(TreeQSM.main_steps.segments(i),:),'Markersize',ms)
 end
 hold off

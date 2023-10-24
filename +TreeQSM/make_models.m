@@ -170,7 +170,7 @@ for t = 1:nt % trees
     inputs.model = j;
     while k <= 5 % try up to five times to generate non-empty models
       try
-        QSM = treeqsm(P,inputs);
+        QSM = TreeQSM.treeqsm(P,inputs);
       catch
         QSM = struct('cylinder',{},'branch',{},'treedata',{},...
           'rundata',{},'pmdistance',{},'triangulation',{});

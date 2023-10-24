@@ -149,7 +149,7 @@ for k = 1:NumOfSeg
     %% Some initialization about the segment
     Seg = Segs{si};      % the current segment under analysis
     nl = max(size(Seg));  % number of cover set layers in the segment
-    [Sets,IndSets] = verticalcat(Seg); % the cover sets in the segment
+    [Sets,IndSets] = TreeQSM.tools.verticalcat(Seg); % the cover sets in the segment
 
     ns = length(Sets);   % number of cover sets in the current segment
     Points = vertcat(cover.ball{Sets}); % the points in the segments
@@ -287,7 +287,7 @@ end
 
 % Growth volume correction
 if inputs.GrowthVolCor && c > 0
-  cylinder = growth_volume_correction(cylinder,inputs);
+  cylinder = TreeQSM.tools.growth_volume_correction(cylinder,inputs);
 end
 
 end % End of main function
@@ -305,7 +305,7 @@ if nl > 6
   while i0 < nl-2
     %% Fit at least three cylinders of different lengths
     bot = Points(Ind(i0,1):Ind(i0+1,2));
-    Bot = average(P(bot,:)); % Bottom axis point of the region
+    Bot = TreeQSM.tools.average(P(bot,:)); % Bottom axis point of the region
     again = true;
     j = 0;
     while i+j <= nl && j <= 10 && (j <= 2 || again)
@@ -313,7 +313,7 @@ if nl > 6
       RegC = Points(Ind(i0,1):Ind(i+j,2)); % candidate region
       % Top axis point of the region:
       top = Points(Ind(i+j-1,1):Ind(i+j,2));
-      Top = average(P(top,:));
+      Top = TreeQSM.tools.average(P(top,:));
       % Axis of the cylinder:
       Axis = Top-Bot;
       c0.axis = Axis/norm(Axis);
@@ -341,7 +341,7 @@ if nl > 6
 
       %% Filter points and estimate radius
       if size(Q0,1) > 20
-        [Keep,c0] = surface_coverage_filtering(Q0,c0,0.02,20);
+        [Keep,c0] = TreeQSM.tools.surface_coverage_filtering(Q0,c0,0.02,20);
         reg = reg(Keep);
         Q0 = Q0(Keep,:);
       else
@@ -355,7 +355,7 @@ if nl > 6
       %% Fit cylinder
       if size(Q0,1) > 9
         if i >= nl && t == 0
-          c = least_squares_cylinder(Q0,c0);
+          c = TreeQSM.least_squares_fitting.least_squares_cylinder(Q0,c0);
         elseif i >= nl && t > 0
           h = (Q0-CylTop)*c0.axis';
           I = h >= 0;
@@ -365,13 +365,13 @@ if nl > 6
           if n2 > 9 && n1 > 5
             Q0 = [Q0(~I,:); Q]; % the point cloud for cylinder fitting
             W = [1/3*ones(n2,1); 2/3*ones(n1,1)]; % the weights
-            c = least_squares_cylinder(Q0,c0,W,Q);
+            c = TreeQSM.least_squares_fitting.least_squares_cylinder(Q0,c0,W,Q);
           else
-            c = least_squares_cylinder(Q0,c0);
+            c = TreeQSM.least_squares_fitting.least_squares_cylinder(Q0,c0);
           end
         elseif t == 0
           top = Points(Ind(i+j-3,1):Ind(i+j-2,2));
-          Top = average(P(top,:)); % Top axis point of the region
+          Top = TreeQSM.tools.average(P(top,:)); % Top axis point of the region
           ht = (Top-Bot)*c0.axis';
           h = (Q0-Bot)*c0.axis';
           I = h <= ht;
@@ -381,13 +381,13 @@ if nl > 6
           if n2 > 9 && n3 > 5
             Q0 = [Q; Q0(~I,:)]; % the point cloud for cylinder fitting
             W = [2/3*ones(n2,1); 1/3*ones(n3,1)]; % the weights
-            c = least_squares_cylinder(Q0,c0,W,Q);
+            c = TreeQSM.least_squares_fitting.least_squares_cylinder(Q0,c0,W,Q);
           else
-            c = least_squares_cylinder(Q0,c0);
+            c = TreeQSM.least_squares_fitting.least_squares_cylinder(Q0,c0);
           end
         else
           top = Points(Ind(i+j-3,1):Ind(i+j-2,2));
-          Top = average(P(top,:)); % Top axis point of the region
+          Top = TreeQSM.tools.average(P(top,:)); % Top axis point of the region
           ht = (Top-CylTop)*c0.axis';
           h = (Q0-CylTop)*c0.axis';
           I1 = h < 0; % the bottom
@@ -399,7 +399,7 @@ if nl > 6
           if n2 > 9
             Q0 = [Q0(I1,:); Q; Q0(I3,:)];
             W = [1/4*ones(n1,1); 2/4*ones(n2,1); 1/4*ones(n3,1)];
-            c = least_squares_cylinder(Q0,c0,W,Q);
+            c = TreeQSM.least_squares_fitting.least_squares_cylinder(Q0,c0,W,Q);
           else
             c = c0;
             c.rel = 0;
@@ -452,13 +452,13 @@ if nl > 6
     CylTop = c.start+c.length*c.axis;
     i0 = i0+1;
     bot = Points(Ind(i0,1):Ind(i0+1,2));
-    Bot = average(P(bot,:)); % Bottom axis point of the region
+    Bot = TreeQSM.tools.average(P(bot,:)); % Bottom axis point of the region
     h = (Bot-CylTop)*c.axis';
     i00 = i0;
     while i0+1 < nl && i0 < i00+5 && h < -c.radius/3
       i0 = i0+1;
       bot = Points(Ind(i0,1):Ind(i0+1,2));
-      Bot = average(P(bot,:)); % Bottom axis point of the region
+      Bot = TreeQSM.tools.average(P(bot,:)); % Bottom axis point of the region
       h = (Bot-CylTop)*c.axis';
     end
     i = i0+5;
@@ -500,9 +500,9 @@ else
   if size(Q0,1) > 10
     %% Define the direction
     bot = Points(Ind(1,1):Ind(1,2));
-    Bot = average(P(bot,:));
+    Bot = TreeQSM.tools.average(P(bot,:));
     top = Points(Ind(nl,1):Ind(nl,2));
-    Top = average(P(top,:));
+    Top = TreeQSM.tools.average(P(top,:));
     Axis = Top-Bot;
     c0.axis = Axis/norm(Axis);
     h = Q0*c0.axis';
@@ -511,11 +511,11 @@ else
     c0.start = Bot-(hpoint-min(h))*c0.axis;
 
     %% Define other outputs
-    [Keep,c0] = surface_coverage_filtering(Q0,c0,0.02,20);
+    [Keep,c0] = TreeQSM.tools.surface_coverage_filtering(Q0,c0,0.02,20);
     Reg = cell(1,1);
     Reg{1} = Points(Keep);
     Q0 = Q0(Keep,:);
-    cyl = least_squares_cylinder(Q0,c0);
+    cyl = TreeQSM.least_squares_fitting.least_squares_cylinder(Q0,c0);
     if ~cyl.conv || ~cyl.rel
       cyl = c0;
     end
@@ -554,7 +554,7 @@ if SPar(si) > 0 % parent segment exists, find the parent cylinder
   PC = CiS{s}; % the cylinders in the parent segment
   % select the closest cylinders for closer examination
   if length(PC) > 1
-    D = mat_vec_subtraction(-cylinder.start(PC,:),-sta(1,:));
+    D = TreeQSM.tools.mat_vec_subtraction(-cylinder.start(PC,:),-sta(1,:));
     d = sum(D.*D,2);
     [~,I] = sort(d);
     if length(PC) > 3
@@ -763,7 +763,7 @@ if SPar(si) > 0 % parent segment exists, find the parent cylinder
       % Add new cylinder
       pc = pc0;
 
-      [Dist,~,DistOnLines] = distances_between_lines(...
+      [Dist,~,DistOnLines] = TreeQSM.tools.distances_between_lines(...
         sta(1,:),axe(1,:),cylinder.start(pc,:),cylinder.axis(pc,:));
 
       I = DistOnLines >= 0;
@@ -795,7 +795,7 @@ if SPar(si) > 0 % parent segment exists, find the parent cylinder
           added = true;
         end
       else
-        V = -mat_vec_subtraction(cylinder.start(pc,:),sta(1,:));
+        V = -TreeQSM.tools.mat_vec_subtraction(cylinder.start(pc,:),sta(1,:));
         L0 = sqrt(sum(V.*V,2));
         V = [V(:,1)./L0 V(:,2)./L0 V(:,3)./L0];
         A = V*axe(1,:)';
@@ -982,17 +982,17 @@ for i = 1:nc
     if abs(cyl.radius(i)-cyl.radius0(i)) > 0.005 && ...
         (nr == nc || (nr < nc && i > 1))
       P = Reg-cyl.start(i,:);
-      [U,V] = orthonormal_vectors(cyl.axis(i,:));
+      [U,V] = TreeQSM.tools.orthonormal_vectors(cyl.axis(i,:));
       P = P*[U V];
-      cir = least_squares_circle_centre(P,[0 0],cyl.radius(i));
+      cir = TreeQSM.least_squares_fitting.least_squares_circle_centre(P,[0 0],cyl.radius(i));
       if cir.conv && cir.rel
         cyl.start(i,:) = cyl.start(i,:)+cir.point(1)*U'+cir.point(2)*V';
         cyl.mad(i,1) = cir.mad;
-        [~,V,h] = distances_to_line(Reg,cyl.axis(i,:),cyl.start(i,:));
+        [~,V,h] = TreeQSM.tools.distances_to_line(Reg,cyl.axis(i,:),cyl.start(i,:));
         if min(h) < -0.001
           cyl.length(i) = max(h)-min(h);
           cyl.start(i,:) = cyl.start(i,:)+min(h)*cyl.axis(i,:);
-          [~,V,h] = distances_to_line(Reg,cyl.axis(i,:),cyl.start(i,:));
+          [~,V,h] = TreeQSM.tools.distances_to_line(Reg,cyl.axis(i,:),cyl.start(i,:));
         end
         a = max(0.02,0.2*cyl.radius(i));
         nl = ceil(cyl.length(i)/a);
@@ -1000,7 +1000,7 @@ for i = 1:nc
         ns = ceil(2*pi*cyl.radius(i)/a);
         ns = max(ns,10);
         ns = min(ns,36);
-        cyl.SurfCov(i,1) = surface_coverage2(...
+        cyl.SurfCov(i,1) = TreeQSM.tools.surface_coverage2(...
           cyl.axis(i,:),cyl.length(i),V,h,nl,ns);
       end
     end
@@ -1018,7 +1018,7 @@ if nc > 1
       % cylinder axis N
       N = cyl.axis(j,:)';
       if norm(N) > 0
-        [V,W] = orthonormal_vectors(N);
+        [V,W] = TreeQSM.tools.orthonormal_vectors(N);
         % Now define the new starting point
         x = [N V W]\U';
         cyl.start(j,:) = cyl.start(j,:)-x(1)*N';
@@ -1034,7 +1034,7 @@ end
 
 %% Connect far away first cylinder to the parent
 if ~isempty(parcyl.radius)
-  [d,V,h,B] = distances_to_line(cyl.start(1,:),parcyl.axis,parcyl.start);
+  [d,V,h,B] = TreeQSM.tools.distances_to_line(cyl.start(1,:),parcyl.axis,parcyl.start);
   d = d-parcyl.radius;
   if d > 0.001
     taper = cyl.start(1,:);

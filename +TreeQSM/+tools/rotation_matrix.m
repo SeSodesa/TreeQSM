@@ -4,7 +4,7 @@ function R = rotation_matrix(A,angle)
 
 A = A/norm(A);
 R = zeros(3,3);
-c = cos(angle); 
+c = cos(angle);
 s = sin(angle);
 R(1,:) = [A(1)^2+(1-A(1)^2)*c  A(1)*A(2)*(1-c)-A(3)*s  A(1)*A(3)*(1-c)+A(2)*s];
 R(2,:) = [A(1)*A(2)*(1-c)+A(3)*s  A(2)^2+(1-A(2)^2)*c  A(2)*A(3)*(1-c)-A(1)*s];

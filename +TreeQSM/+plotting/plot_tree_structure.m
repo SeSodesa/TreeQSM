@@ -9,13 +9,13 @@ function plot_tree_structure(P,cover,segment,fig,ms,segind,BO)
 %
 % Copyright (C) 2013-2020 Pasi Raumonen
 % ---------------------------------------------------------------------
-% 
+%
 % Blue = trunk, Green = 1st-order branches, Red = 2nd-order branches, etc.
-% If segind = 1 and BO = 0, then plots the stem. If segind = 1 and BO = 1, 
-% then plots the stem and the 1st-order branches. If segind = 1 and 
-% BO >= maximum branching order or BO input is not given, then plots the 
+% If segind = 1 and BO = 0, then plots the stem. If segind = 1 and BO = 1,
+% then plots the stem and the 1st-order branches. If segind = 1 and
+% BO >= maximum branching order or BO input is not given, then plots the
 % whole tree. If segind = 2 and BO is not given or it is high enough, then
-% plots the branch whose index is 2 and all its sub-branches. 
+% plots the branch whose index is 2 and all its sub-branches.
 %
 % Inputs
 % P         Point cloud
@@ -24,9 +24,9 @@ function plot_tree_structure(P,cover,segment,fig,ms,segind,BO)
 % fig       Figure number
 % ms        Marker size
 % segind    Index of the segment where the plotting of tree structure
-%                   starts. 
+%                   starts.
 % BO        How many branching orders are plotted. 0 = stem, 1 = 1st order, etc
-% 
+%
 
 % Changes from version 1.0.0 to 1.1.0, 13 July 2020:
 % 1) Added option for choosing the coloring based either on branch order or

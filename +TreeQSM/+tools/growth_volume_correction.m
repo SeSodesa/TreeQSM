@@ -1,7 +1,7 @@
 function cylinder = growth_volume_correction(cylinder,inputs)
 
 % ---------------------------------------------------------------------
-% GROWTH_VOLUME_CORRECTION.M       Use growth volume allometry approach to 
+% GROWTH_VOLUME_CORRECTION.M       Use growth volume allometry approach to
 %                                   modify the radius of cylinders.
 %
 % Version 2.0.0
@@ -10,20 +10,20 @@ function cylinder = growth_volume_correction(cylinder,inputs)
 % Copyright (C) 2013-2021 Pasi Raumonen
 % ---------------------------------------------------------------------
 %
-% Use growth volume (= the total volume "supported by the cylinder") 
-% allometry approach to modify the radius of too large and too small 
-% cylinders. Uses the allometry: 
+% Use growth volume (= the total volume "supported by the cylinder")
+% allometry approach to modify the radius of too large and too small
+% cylinders. Uses the allometry:
 %
 %       Radius = a * GrowthVolume^b + c
 %
 % If cylinder's radius is over fac-times or under 1/fac-times the radius
-% predicted from the growth volume allometry, then correct the radius to 
+% predicted from the growth volume allometry, then correct the radius to
 % match the allometry. However, the radius of the cylinders in the branch
-% tips are never incresed, only decreased by the correction. More details 
+% tips are never incresed, only decreased by the correction. More details
 % can be from Jan Hackenberg's "SimpleTree" papers and documents.
 % ---------------------------------------------------------------------
 % Inputs:
-% cylinder    Structure array that needs to contains the following fields: 
+% cylinder    Structure array that needs to contains the following fields:
 %   radius (Rad)        Radii of the cylinders, vector
 %   length (Len)        Lengths of the cylinders, vector
 %   parent (CPar)       Parents of the cylinders, vector
@@ -35,7 +35,7 @@ function cylinder = growth_volume_correction(cylinder,inputs)
 % Changes from version 1.0.0 to 2.0.0, 16 Sep 2021:
 % 1) Changed the roles of RADIUS and GROWTH_VOLUME in the allometry, i.e.
 %    the radius is now predicted from the growth volume
-% 2) Do not increase the radius of the branch tip cylinders 
+% 2) Do not increase the radius of the branch tip cylinders
 
 disp('----------')
 disp('Growth volume based correction of cylinder radii:')
@@ -127,7 +127,7 @@ J = abs(R-CorRad) == D;
 D = CorRad(J)-R(J);
 
 % modify the radius according to allometry
-Rad(modify) = CorRad; 
+Rad(modify) = CorRad;
 cylinder.radius = Rad;
 
 disp([' Modified ',num2str(nnz(modify)),' of the ',num2str(n),' cylinders'])
@@ -137,7 +137,7 @@ disp([' Corrected volume (L): ', num2str(corrected_volume)])
 disp([' Change in volume (L): ', num2str(corrected_volume-initial_volume)])
 disp('----------')
 
-% % Plot cylinder models where the color indicates change (green = no change, 
+% % Plot cylinder models where the color indicates change (green = no change,
 % % red = decreased radius, cyan = increased radius)
 % cylinder.branch = ones(n,1);
 % cylinder.BranchOrder = ones(n,1);
@@ -145,11 +145,11 @@ disp('----------')
 % cylinder.BranchOrder(I) = 2;
 % I = Rad > Rad0;
 % cylinder.BranchOrder(I) = 3;
-% plot_cylinder_model(cylinder,'order',3,20,1)
-% 
+% TreeQSM.plotting.plot_cylinder_model(cylinder,'order',3,20,1)
+%
 % cyl = cylinder;
 % cyl.radius = Rad0;
-% plot_cylinder_model(cyl,'order',4,20,1)
+% TreeQSM.plotting.plot_cylinder_model(cyl,'order',4,20,1)
 
 end % End of main function
 

@@ -16,7 +16,7 @@
 function inputs = define_input(Clouds,nPD1,nPD2Min,nPD2Max)
 
 % ---------------------------------------------------------------------
-% DEFINE_INPUT.M       Defines the required inputs (PatchDiam and BallRad 
+% DEFINE_INPUT.M       Defines the required inputs (PatchDiam and BallRad
 %                        parameters) for TreeQSM based in estimated tree
 %                        radius.
 %
@@ -26,16 +26,16 @@ function inputs = define_input(Clouds,nPD1,nPD2Min,nPD2Max)
 % Copyright (C) 2013-2022 Pasi Raumonen
 % ---------------------------------------------------------------------
 
-% Takes in a single tree point clouds, that preferably contains only points 
+% Takes in a single tree point clouds, that preferably contains only points
 % from the tree and not e.g. from groung. User defines the number of
 % PatchDiam1, PatchDiam2Min, PatchDiam2Max parameter values needed. Then
-% the code estimates automatically these parameter values based on the 
+% the code estimates automatically these parameter values based on the
 % tree stem radius and tree height. Thus this code can be used to generate
 % the inputs needed for QSM reconstruction with TreeQSM.
 %
 % Inputs:
 % P         Point cloud of a tree OR string specifying the name of the .mat
-%             file where multiple point clouds are saved              
+%             file where multiple point clouds are saved
 % nPD1      Number of parameter values estimated for PatchDiam1
 % nPD2Min   Number of parameter values estimated for PatchDiam2Min
 % nPD2Max   Number of parameter values estimated for PatchDiam2Max
@@ -101,11 +101,11 @@ for i = 1:nt
   % Estimate stem axis (point and direction)
   AxisPoint = mean(StemBot);
   V = StemBot-AxisPoint;
-  V = normalize(V);
-  AxisDir = optimal_parallel_vector(V);
+  V = TreeQSM.tools.normalize(V);
+  AxisDir = TreeQSM.tools.optimal_parallel_vector(V);
 
   % Estimate stem diameter
-  d = distances_to_line(StemBot,AxisDir,AxisPoint);
+  d = TreeQSM.tools.distances_to_line(StemBot,AxisDir,AxisPoint);
   Rstem = double(median(d));
 
   % Point resolution (distance between points)
@@ -146,5 +146,5 @@ for i = 1:nt
   inputs(i).BallRad2 = max([inputs(i).PatchDiam2Max+1.25*Res;
     min(1.2*inputs(i).PatchDiam2Max,inputs(i).PatchDiam2Max+0.025)]);
 
-  %plot_point_cloud(P,1,1)
+  %TreeQSM.plotting.plot_point_cloud(P,1,1)
 end

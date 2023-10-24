@@ -20,7 +20,7 @@ function [TreeData,OptModels,OptInputs,OptQSM] = ...
 % SELECT_OPTIMUM.M       Selects optimum models based on point-cylinder model
 %                           distances or standard deviations of attributes
 %
-% Version 1.4.0 
+% Version 1.4.0
 % Latest update     2 May 2022
 %
 % Copyright (C) 2013-2022 Pasi Raumonen
@@ -159,7 +159,7 @@ function [TreeData,OptModels,OptInputs,OptQSM] = ...
 %               Thus for single number attributes (e.g. TotalVolume) there
 %               are five numbers [mean std sensi_PD1 sensi_PD2Min sensi_PD2Max]
 % OptModels     Indexes of the models with the optimal inputs (column 1) and
-%               the index of the optimal single model (column 2) in "QSMs" 
+%               the index of the optimal single model (column 2) in "QSMs"
 %               for each tree
 % OptInputs     The optimal input parameters for each tree
 % OptQSMs       The single best QSM for each tree, OptQSMs = QSMs(OptModel);
@@ -370,14 +370,14 @@ for tree = 1:nt
   end
 
   % Decrease the number on non-zero decimals
-  DataM(:,tree) = change_precision(DataM(:,tree));
-  DataS(:,tree) = change_precision(DataS(:,tree));
+  DataM(:,tree) = TreeQSM.tools.change_precision(DataM(:,tree));
+  DataS(:,tree) = TreeQSM.tools.change_precision(DataS(:,tree));
   if ninputs > 1
-    DataM2(:,tree) = change_precision(DataM2(:,tree));
-    DataS2(:,tree) = change_precision(DataS2(:,tree));
+    DataM2(:,tree) = TreeQSM.tools.change_precision(DataM2(:,tree));
+    DataS2(:,tree) = TreeQSM.tools.change_precision(DataS2(:,tree));
     if ninputs > 2
-      DataM3(:,tree) = change_precision(DataM3(:,tree));
-      DataS3(:,tree) = change_precision(DataS3(:,tree));
+      DataM3(:,tree) = TreeQSM.tools.change_precision(DataM3(:,tree));
+      DataS3(:,tree) = TreeQSM.tools.change_precision(DataS3(:,tree));
     end
   end
 
@@ -410,11 +410,11 @@ if ninputs > 1
 end
 % Decrease the number on non-zero decimals
 for j = 1:nt
-  DataCV(:,j) = change_precision(DataCV(:,j));
+  DataCV(:,j) = TreeQSM.tools.change_precision(DataCV(:,j));
   if ninputs > 1
-    DataCV2(:,j) = change_precision(DataCV2(:,j));
+    DataCV2(:,j) = TreeQSM.tools.change_precision(DataCV2(:,j));
     if ninputs > 2
-      DataCV3(:,j) = change_precision(DataCV3(:,j));
+      DataCV3(:,j) = TreeQSM.tools.change_precision(DataCV3(:,j));
     end
   end
 end
@@ -482,8 +482,8 @@ for t = 1:nt
         DataM(i,t)-DataM3(i,t)])/DataM(i,t));
       sensi2 = 100*sensi;
       sensi = 100*sensi/DataCV(i,t);
-      sensi2 = change_precision(sensi2);
-      sensi = change_precision(sensi);
+      sensi2 = TreeQSM.tools.change_precision(sensi2);
+      sensi = TreeQSM.tools.change_precision(sensi);
       str = (['      ',Names{i},':  ',num2str([DataM(i,t) DataS(i,t) ...
         DataCV(i,t) DataM2(i,t) DataM3(i,t) sensi sensi2])]);
       disp(str)

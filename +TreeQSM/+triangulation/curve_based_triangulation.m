@@ -34,7 +34,7 @@ function triangulation = curve_based_triangulation(P,TriaHeight,TriaWidth)
 % triangulation  Structure field defining the triangulation. Contains
 %                   the following main fields:
 %   vert            Vertices of the triangulation model (nv x 3)-matrix
-%   facet           Facets (triangles) of the triangulation 
+%   facet           Facets (triangles) of the triangulation
 %                     (the vertices forming the facets)
 %   fvd             Color information of the facets for plotting with "patch"
 %   volume          Volume enclosed by the facets in liters
@@ -45,16 +45,16 @@ function triangulation = curve_based_triangulation(P,TriaHeight,TriaWidth)
 % ---------------------------------------------------------------------
 
 % Changes from version 1.0.2 to 1.1.0, 3 May 2022:
-% 1) Increased the radius of the balls at seed points from TriaWidth to 
+% 1) Increased the radius of the balls at seed points from TriaWidth to
 %    2*TriaWidth in the input of "boundary_curve"
 % 2) Added triangle orientation check after the side is covered with
-%    triangles so that the surface normals are pointing outward 
-% 3) Modified the check if the new boundary curve changes only a little and 
-%    then stop reconstruction  
+%    triangles so that the surface normals are pointing outward
+% 3) Modified the check if the new boundary curve changes only a little and
+%    then stop reconstruction
 % 4) Added halving the triangle height if the boundary curve length has
 %    increased three times.
-% 5) Changed the bottom level from the smallest z-coordinate to the  
-%    average of the lowest 100 z-coordinates. 
+% 5) Changed the bottom level from the smallest z-coordinate to the
+%    average of the lowest 100 z-coordinates.
 % 6) Minor streamlining the code and added more comments
 
 % Changes from version 1.0.2 to 1.0.3, 11 Aug 2020:
@@ -100,7 +100,7 @@ while i < N/4 && isempty(Curve)
   iter = 0;
   while iter <= 15 && isempty(Curve)
     iter = iter+1;
-    Curve = initial_boundary_curve(PSection,TriaWidth);
+    Curve = TreeQSM.triangulation.initial_boundary_curve(PSection,TriaWidth);
   end
 end
 
@@ -143,7 +143,7 @@ while i <= N && pe < np
   Curve0 = Curve;
 
   % Create new boundary curve
-  [Curve,Ind] = boundary_curve(PSection,Curve,2*TriaWidth,1.5*TriaWidth);
+  [Curve,Ind] = TreeQSM.triangulation.boundary_curve(PSection,Curve,2*TriaWidth,1.5*TriaWidth);
 
   if isempty(Curve)
     disp('  No triangulation: Empty curve')
@@ -153,7 +153,7 @@ while i <= N && pe < np
   Curve(:,3) = max(Curve(:,3));
 
   %% Check if the curve intersects itself
-  [Intersect,IntersectLines] = check_self_intersection(Curve(:,1:2));
+  [Intersect,IntersectLines] = TreeQSM.triangulation.check_self_intersection(Curve(:,1:2));
 
   %% If self-intersection, try to modify the curve
   j = 1;
@@ -177,7 +177,7 @@ while i <= N && pe < np
             0.9*CrossLen(k)/d(CrossLines(k))*LineEle(CrossLines(k),:);
         end
       end
-      [Intersect,IntersectLines] = check_self_intersection(Curve(:,1:2));
+      [Intersect,IntersectLines] = TreeQSM.triangulation.check_self_intersection(Curve(:,1:2));
       j = j+1;
     else
       j = 11;
@@ -278,7 +278,7 @@ while i <= N && pe < np
     % decrease the triangle height
     if m > 3*m00
       TriaHeight = TriaHeight/2; % use half the height
-      N = N+ceil((N-i)/2); % update the number of layers 
+      N = N+ceil((N-i)/2); % update the number of layers
       m00 = m;
     end
 
@@ -344,7 +344,7 @@ VertLay = VertLay(1:nv);
 Tria = Tria(1:t,:);
 TriaLay = TriaLay(1:t);
 
-%% Check the orientation of the triangles 
+%% Check the orientation of the triangles
 % so that surface normals are outward pointing
 a = round(t/10); % select the top triangles
 U = Vert(Tria(1:a,2),:)-Vert(Tria(1:a,1),:);
@@ -360,11 +360,11 @@ end
 % U = Vert(Tria(1:t,2),:)-Vert(Tria(1:t,1),:);
 % V = Vert(Tria(1:t,3),:)-Vert(Tria(1:t,1),:);
 % Normals = cross(U,V);
-% Normals = normalize(Normals);
+% Normals = TreeQSM.tools.normalize(Normals);
 % C = Vert(Tria(1:t,1),:)+0.25*V+0.25*U;
 % fvd = ones(t,1);
 % figure(5)
-% point_cloud_plotting(P(1,:),5,6)
+% TreeQSM.plotting.point_cloud_plotting(P(1,:),5,6)
 % patch('Vertices',Vert,'Faces',Tria,'FaceVertexCData',fvd,'FaceColor','flat')
 % alpha(1)
 % hold on
@@ -379,7 +379,7 @@ nt = size(Tria,1);
 Keep = true(nt,1);
 Scoord = Vert(Tria(:,1),:)+Vert(Tria(:,2),:)+Vert(Tria(:,3),:);
 S = sum(Scoord,2);
-[part,CC] = cubical_partition(Scoord,2*TriaWidth);
+[part,CC] = TreeQSM.tools.cubical_partition(Scoord,2*TriaWidth);
 for j = 1:nt-1
   if Keep(j)
     points = part(CC(j,1)-1:CC(j,1)+1,CC(j,2)-1:CC(j,2)+1,CC(j,3)-1:CC(j,3)+1);
@@ -550,7 +550,7 @@ triangulation.triah = TriaHeight;
 triangulation.triaw = TriaWidth;
 
 % figure(5)
-% point_cloud_plotting(P,5,6)
+% TreeQSM.plotting.point_cloud_plotting(P,5,6)
 % patch('Vertices',Vert,'Faces',Tria,'FaceVertexCData',fvd,'FaceColor','flat')
 % % hold on
 % % arrow_plot(Cs,0.2*Ns,5)

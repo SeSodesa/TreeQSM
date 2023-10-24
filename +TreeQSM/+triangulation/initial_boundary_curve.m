@@ -43,7 +43,7 @@ ShortestDist = 0;
 while ShortestDist < 0.075 && i < 100
   Center = Center0+[3*ShortestDist*randn(1,2) 0]; % Randomly move the center
   % Compute angles of points as seen from the center
-  V = mat_vec_subtraction(P(:,1:2),Center(1:2));
+  V = TreeQSM.tools.mat_vec_subtraction(P(:,1:2),Center(1:2));
   angle = 180/pi*atan2(V(:,2),V(:,1))+180;
   % % Check if the center is outside or near the boundary of the cross section
   A = false(70,1);
@@ -115,14 +115,14 @@ while any(D > 1.25*TriaWidth) && n > n0
   t = 0;
   for i = 1:n
     if D(i) > 1.25*TriaWidth
-      [d,~,hc] = distances_to_line(P(Curve1,:),N(i,:),M(i,:));
+      [d,~,hc] = TreeQSM.tools.distances_to_line(P(Curve1,:),N(i,:),M(i,:));
       I = hc > 0.01 & d < D(i)/2;
       if any(I)
         H = min(hc(I));
       else
         H = 1;
       end
-      [d,~,h] = distances_to_line(P(Ind,:),N(i,:),M(i,:));
+      [d,~,h] = TreeQSM.tools.distances_to_line(P(Ind,:),N(i,:),M(i,:));
       I = d < D(i)/3 & h > -TriaWidth/2 & h < H;
 
       if any(I)
@@ -166,14 +166,14 @@ while n > n0
   t = 0;
   for i = 1:n
     if D(i) > 0.5*TriaWidth
-      [d,~,hc] = distances_to_line(P(Curve1,:),N(i,:),M(i,:));
+      [d,~,hc] = TreeQSM.tools.distances_to_line(P(Curve1,:),N(i,:),M(i,:));
       I = hc > 0.01 & d < D(i)/2;
       if any(I)
         H = min(hc(I));
       else
         H = 1;
       end
-      [d,~,h] = distances_to_line(P(Ind,:),N(i,:),M(i,:));
+      [d,~,h] = TreeQSM.tools.distances_to_line(P(Ind,:),N(i,:),M(i,:));
       I = d < D(i)/3 & h > -TriaWidth/3 & h < H;
       ind = Ind(I);
       h = h(I);
@@ -209,7 +209,7 @@ end
 
 %% Smooth the curve by defining the points by means of neighbors
 Curve = P(Curve,:); % Change the curve from point indexes to coordinates
-Curve = boundary_curve2(P,Curve,0.04,TriaWidth);
+Curve = TreeQSM.triangulation.boundary_curve2(P,Curve,0.04,TriaWidth);
 if isempty(Curve)
   return
 end
@@ -260,7 +260,7 @@ for i = 2:m
 end
 Curve = Curve1;
 
-Intersect = check_self_intersection(Curve(:,1:2));
+Intersect = TreeQSM.triangulation.check_self_intersection(Curve(:,1:2));
 if Intersect
   Curve = zeros(0,3);
 end

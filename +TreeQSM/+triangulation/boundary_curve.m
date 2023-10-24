@@ -124,7 +124,7 @@ if nnz(Num) > 0.05*nc
   end
 
   %% Interpolate for empty segments
-  % For empty segments create points by interpolation from neighboring 
+  % For empty segments create points by interpolation from neighboring
   % non-empty segments
   if any(Empty)
     for i = 1:nc
@@ -182,7 +182,7 @@ if nnz(Num) > 0.05*nc
   Curve(:,3) = min(Curve(:,3));
 
   % Check self-intersection
-  [Intersect,IntersectLines] = check_self_intersection(Curve(:,1:2));
+  [Intersect,IntersectLines] = TreeQSM.triangulation.check_self_intersection(Curve(:,1:2));
 
   % If self-intersection, try to modify the curve
   j = 1;
@@ -206,7 +206,7 @@ if nnz(Num) > 0.05*nc
             0.9*CrossLen(i)/d(InterLines(i))*LineEle(InterLines(i),:);
         end
       end
-      [Intersect,IntersectLines] = check_self_intersection(Curve(:,1:2));
+      [Intersect,IntersectLines] = TreeQSM.triangulation.check_self_intersection(Curve(:,1:2));
       j = j+1;
     else
       j = 6;

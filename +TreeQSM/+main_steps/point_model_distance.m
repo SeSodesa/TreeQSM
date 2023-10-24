@@ -1,22 +1,22 @@
 % This file is part of TREEQSM.
-% 
+%
 % TREEQSM is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
-% 
+%
 % TREEQSM is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
-% 
+%
 % You should have received a copy of the GNU General Public License
 % along with TREEQSM.  If not, see <http://www.gnu.org/licenses/>.
 
 function pmdistance = point_model_distance(P,cylinder)
 
 % ---------------------------------------------------------------------
-% POINT_MODEL_DISTANCE.M    Computes the distances of the points to the 
+% POINT_MODEL_DISTANCE.M    Computes the distances of the points to the
 %                               cylinder model
 %
 % Version 2.1.1
@@ -25,12 +25,12 @@ function pmdistance = point_model_distance(P,cylinder)
 % Copyright (C) 2015-2021 Pasi Raumonen
 % ---------------------------------------------------------------------
 
-% Changes from version 2.1.0 to 2.1.1, 8 Oct 2021:  
-% 1) Changed the determinationa NE, the number of empty edge layers, so 
-%     that is now limited in size, before it is given as input for 
+% Changes from version 2.1.0 to 2.1.1, 8 Oct 2021:
+% 1) Changed the determinationa NE, the number of empty edge layers, so
+%     that is now limited in size, before it is given as input for
 %     cubical_partition function.
 
-% Changes from version 2.0.0 to 2.1.0, 26 Nov 2019:  
+% Changes from version 2.0.0 to 2.1.0, 26 Nov 2019:
 % 1) Bug fix: Corrected the computation of the output at the end of the
 %    code so that trees without branches are computed correctly.
 
@@ -47,10 +47,10 @@ a = min(0.25*np0,1000000);
 I = logical(round(0.5/(1-a/np0)*rand(np0,1)));
 P = P(I,:);
 
-% Partition the points into cubes 
+% Partition the points into cubes
 L = 2*median(Len);
 NE = max(3,min(10,ceil(max(Len)/L)))+3;
-[Partition,~,Info] = cubical_partition(P,L,NE);
+[Partition,~,Info] = TreeQSM.tools.cubical_partition(P,L,NE);
 Min = Info(1:3);
 EL = Info(7);
 NE = Info(8);
@@ -99,7 +99,7 @@ for i = 1:n
   else
     points = vertcat(Par{:});
   end
-  [d,~,h] = distances_to_line(P(points,:),Axe(i,:),Sta(i,:));
+  [d,~,h] = TreeQSM.tools.distances_to_line(P(points,:),Axe(i,:),Sta(i,:));
   d = abs(d-Rad(i));
   Data{i} = [d h double(points)];
   I = d < Dist(points,1);

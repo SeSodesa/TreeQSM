@@ -1,15 +1,15 @@
 % This file is part of TREEQSM.
-% 
+%
 % TREEQSM is free software: you can redistribute it and/or modify
 % it under the terms of the GNU General Public License as published by
 % the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
-% 
+%
 % TREEQSM is distributed in the hope that it will be useful,
 % but WITHOUT ANY WARRANTY; without even the implied warranty of
 % MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 % GNU General Public License for more details.
-% 
+%
 % You should have received a copy of the GNU General Public License
 % along with TREEQSM.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -93,7 +93,7 @@ if length(Sub) <= 3 && ~islogical(Sub) && Sub(1) > 0
             CompSize = [1 1 1];
         end
     end
-    
+
 elseif any(Sub) || (length(Sub) == 1 && Sub(1) == 0)
     nb = size(Nei,1);
     if nargin == 3
@@ -121,7 +121,7 @@ elseif any(Sub) || (length(Sub) == 1 && Sub(1) == 0)
         % Subset of cover sets
         ns = nnz(Sub);
     end
-    
+
     Components = cell(ns,1);
     CompSize = zeros(ns,1,'uint32');
     nc = 0;      % number of components found

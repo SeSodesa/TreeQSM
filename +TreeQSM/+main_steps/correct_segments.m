@@ -50,8 +50,8 @@ function segment = correct_segments(P,cover,segment,inputs,RemSmall,ModBases,Add
 
 % Changes from version 2.0.1 to 2.0.2, 2 May 2022:
 % 1) Added "if ~isempty(SegChildren)... " statement to the
-%    "modify_topology" subfunction where next branch is selected based on 
-%    the increasing branching order to prevent a rare bug 
+%    "modify_topology" subfunction where next branch is selected based on
+%    the increasing branching order to prevent a rare bug
 
 % Changes from version 2.0.0 to 2.0.1, 2 Oct 2019:
 % 1) Main function: added "if SPar(i,1) > 1"-statement to ModBase -->
@@ -186,7 +186,7 @@ nseg = size(Segs,1);
 SegHeight = zeros(nseg,1); % heights of the tips of the segments
 HorDist = zeros(nseg,1); % horizontal distances of the tips from stem's center
 s = Segs{1}{1};
-StemCen = average(Ce(s,:)); % center (x,y) of stem base
+StemCen = TreeQSM.tools.average(Ce(s,:)); % center (x,y) of stem base
 for i = 1:nseg
   S = Segs{i}{end}(1);
   SegHeight(i) = Ce(S,3);
@@ -286,10 +286,10 @@ while LenDisRatio > MaxLenDisRatio
       end
       S = Seg{I};
       if length(S) > 1
-        Nodes(j,:) = average(Ce(S,:));
+        Nodes(j,:) = TreeQSM.tools.average(Ce(S,:));
       else
         S = Bal{S};
-        Nodes(j,:) = average(P(S,:));
+        Nodes(j,:) = TreeQSM.tools.average(P(S,:));
       end
     end
     V = Nodes(2:end,:)-Nodes(1:end-1,:);
@@ -350,10 +350,10 @@ Segments = Segments(1:t);
 % segment
 LinearDist = zeros(t,1); % linear distances from the
 Seg = Segs{Segments(1)};
-BranchBase = average(Ce(Seg{1},:)); % center of branch's base
+BranchBase = TreeQSM.tools.average(Ce(Seg{1},:)); % center of branch's base
 for i = 1:t
   Seg = Segs{Segments(i)};
-  C = average(Ce(Seg{end},:)); % tip
+  C = TreeQSM.tools.average(Ce(Seg{end},:)); % tip
   LinearDist(i) = norm(C-BranchBase);
 end
 LinearDist = LinearDist(1:t);
@@ -445,10 +445,10 @@ while i <= t && Continue
     end
     S = Seg{I};
     if length(S) > 1
-      Nodes(j,:) = average(Ce(S,:));
+      Nodes(j,:) = TreeQSM.tools.average(Ce(S,:));
     else
       S = Bal{S};
-      Nodes(j,:) = average(P(S,:));
+      Nodes(j,:) = TreeQSM.tools.average(P(S,:));
     end
   end
   V = Nodes(2:end,:)-Nodes(1:end-1,:); % line segments
@@ -525,11 +525,11 @@ while any(UnMod)
 
       % Define bottom of the branch
       BotLayer = Segs{SegInd}{1};
-      Bottom = average(Ce(BotLayer,:));
+      Bottom = TreeQSM.tools.average(Ce(BotLayer,:));
 
       % End segment is the segment whose tip has greatest distance to
       % the bottom of the branch
-      V = mat_vec_subtraction(Top,Bottom);
+      V = TreeQSM.tools.mat_vec_subtraction(Top,Bottom);
       d = sum(V.*V,2);
       [~,I] = max(d);
       TipSeg = SubSegments(I(1));
@@ -586,7 +586,7 @@ while any(UnMod)
 
             ChildSegs = SChi{I};
             SChi{I} = zeros(0,1);
-            c = set_difference(SChi{SegInd},I,Fal);
+            c = TreeQSM.tools.set_difference(SChi{SegInd},I,Fal);
             SChi{SegInd} = [c; ChildSegs];
             SPar(ChildSegs,1) = SegInd;
             SPar(ChildSegs,2) = N+SPar(ChildSegs,2);
@@ -633,7 +633,7 @@ while any(UnMod)
             UnMod(I) = false;
 
             ChildSegs = SChi{I};
-            c = set_difference(SChi{SegInd},I,Fal);
+            c = TreeQSM.tools.set_difference(SChi{SegInd},I,Fal);
             SChi{SegInd} = [c; ChildSegs];
             SPar(ChildSegs,1) = SegInd;
             SPar(ChildSegs,2) = SP+SPar(ChildSegs,2);
@@ -660,7 +660,7 @@ while any(UnMod)
         if size(ChildSegs,1) < size(ChildSegs,2)
           ChildSegs = ChildSegs';
         end
-        c = set_difference(SChi{SegInd},I,Fal);
+        c = TreeQSM.tools.set_difference(SChi{SegInd},I,Fal);
         SChi{SegInd} = [c; ChildSegs];
         SPar(ChildSegs,1) = SegInd;
         SPar(ChildSegs,2) = N+SPar(ChildSegs,2);
@@ -684,7 +684,7 @@ while any(UnMod)
         SPar(ChildSegs,2) = SPar(ChildSegs,2)-SP;
 
         ChildSegs = SChi{I};
-        c = set_difference(SChi{SegInd},I,Fal);
+        c = TreeQSM.tools.set_difference(SChi{SegInd},I,Fal);
         SChi{SegInd} = [c; ChildSegs];
         SPar(ChildSegs,1) = SegInd;
         SPar(ChildSegs,2) = SP+SPar(ChildSegs,2);
@@ -791,12 +791,12 @@ if ns > 10
 else
   EndL = ns;
 end
-End = average(Ce(Segment{EndL},:)); % Center of end layer
-Start = average(Ce(Segment{1},:));  % Center of starting layer
+End = TreeQSM.tools.average(Ce(Segment{EndL},:)); % Center of end layer
+Start = TreeQSM.tools.average(Ce(Segment{1},:));  % Center of starting layer
 V = End-Start;  % Vector between starting and ending centers
 V = V/norm(V);  % normalize
 Sets = vertcat(Segment{1:EndL});
-MaxRad = max(distances_to_line(Ce(Sets,:),V,Start));
+MaxRad = max(TreeQSM.tools.distances_to_line(Ce(Sets,:),V,Start));
 
 Nseg = size(Segs,1);
 Fal = false(Nseg,1);
@@ -821,8 +821,8 @@ for i = 1:Nseg
         else
           EndL = ns;
         end
-        End = average(Ce(Segment{EndL},:));
-        Start = average(Ce(Segment{StartL},:));
+        End = TreeQSM.tools.average(Ce(Segment{EndL},:));
+        Start = TreeQSM.tools.average(Ce(Segment{StartL},:));
         V = End-Start;  % Vector between starting and ending centers
         V = V/norm(V);  % normalize
 
@@ -838,7 +838,7 @@ for i = 1:Nseg
         ChildSets = Sets(1:a-1);
 
         % maximum distance in child
-        distChild = max(distances_to_line(Ce(ChildSets,:),V,Start));
+        distChild = max(TreeQSM.tools.distances_to_line(Ce(ChildSets,:),V,Start));
 
         if distChild < MaxRad+0.06
 
@@ -853,7 +853,7 @@ for i = 1:Nseg
           ParentSets = Sets(1:a-1);
 
           % maximum distance in parent
-          distPar = max(distances_to_line(Ce(ParentSets,:),V,Start));
+          distPar = max(TreeQSM.tools.distances_to_line(Ce(ParentSets,:),V,Start));
           if (distChild-distPar < 0.02) || (distChild/distPar < 1.2 && distChild-distPar < 0.06)
             ChildChildSegs = SChi{ChildSegs(j)};
             nc = length(ChildChildSegs);
@@ -862,7 +862,7 @@ for i = 1:Nseg
               Keep(ChildSegs(j)) = false;
               Segs{ChildSegs(j)} = zeros(0,1);
               SPar(ChildSegs(j),:) = zeros(1,2);
-              SChi{i} = set_difference(ChildSegs,ChildSegs(j),Fal);
+              SChi{i} = TreeQSM.tools.set_difference(ChildSegs,ChildSegs(j),Fal);
             else
               L = SChi(ChildChildSegs);
               L = vertcat(L{:}); % child child segments
@@ -874,7 +874,7 @@ for i = 1:Nseg
                     J(k) = true;
                   else
                     segment1 = [vertcat(segment{:}); ParentSets];
-                    distSeg = max(distances_to_line(Ce(segment1,:),V,Start));
+                    distSeg = max(TreeQSM.tools.distances_to_line(Ce(segment1,:),V,Start));
                     if (distSeg-distPar < 0.02) || (distSeg/distPar < 1.2 && distSeg-distPar < 0.06)
                       J(k) = true;
                     end
@@ -887,7 +887,7 @@ for i = 1:Nseg
                   Segs(ChildChildSegs1) = cell(nc,1);
                   Keep(ChildChildSegs1) = false;
                   SPar(ChildChildSegs1,:) = zeros(nc,2);
-                  d = set_difference(ChildSegs,ChildSegs(j),Fal);
+                  d = TreeQSM.tools.set_difference(ChildSegs,ChildSegs(j),Fal);
                   SChi{i} = d;
                   SChi(ChildChildSegs1) = cell(nc,1);
                 end
@@ -945,12 +945,12 @@ if ~isempty(Base)
   DirPar = segment_direction(Ce,SegP,nl);
 
   if length(Base) > 1
-    BaseCent = average(Ce(Base,:));
-    db = distances_to_line(Ce(Base,:), DirChi', BaseCent); % distances of the sets in the base to the axis of the branch
+    BaseCent = TreeQSM.tools.average(Ce(Base,:));
+    db = TreeQSM.tools.distances_to_line(Ce(Base,:), DirChi', BaseCent); % distances of the sets in the base to the axis of the branch
     DiamBase = 2*max(db);  % diameter of the base
   elseif length(Bal{Base}) > 1
-    BaseCent = average(P(Bal{Base},:));
-    db = distances_to_line(P(Bal{Base},:), DirChi', BaseCent);
+    BaseCent = TreeQSM.tools.average(P(Bal{Base},:));
+    db = TreeQSM.tools.distances_to_line(P(Bal{Base},:), DirChi', BaseCent);
     DiamBase = 2*max(db);
   else
     BaseCent = Ce(Base,:);
@@ -969,16 +969,16 @@ if ~isempty(Base)
   base{1} = Base;
   while layer < Nlayer
     Sets = SegP{nl-layer};
-    Seg = average(Ce(Sets,:)); % mean of the cover sets' centers
+    Seg = TreeQSM.tools.average(Ce(Sets,:)); % mean of the cover sets' centers
 
-    VBase = mat_vec_subtraction(Ce(Sets,:),BaseCent);  % vectors from base's center to sets in the segment
+    VBase = TreeQSM.tools.mat_vec_subtraction(Ce(Sets,:),BaseCent);  % vectors from base's center to sets in the segment
     h = VBase*DirChi;
     B = repmat(DirChi',length(Sets),1);
     B = [h.*B(:,1) h.*B(:,2) h.*B(:,3)];
     V = VBase-B;
     distSets = sqrt(sum(V.*V,2)); % distances of the sets in the segment to the axis of the branch
 
-    VSeg = mat_vec_subtraction(Ce(Sets,:),Seg);  % vectors from segments's center to sets in the segment
+    VSeg = TreeQSM.tools.mat_vec_subtraction(Ce(Sets,:),Seg);  % vectors from segments's center to sets in the segment
     lenBase = sqrt(sum(VBase.*VBase,2)); % lengths of VBase
     lenSeg = sqrt(sum(VSeg.*VSeg,2)); % lengths of VSeg
     if Angle < 0.9
@@ -1031,8 +1031,8 @@ end
 
 % Direction
 if top > bot
-  Bot = average(Ce(Seg{bot},:));
-  Top = average(Ce(Seg{top},:));
+  Bot = TreeQSM.tools.average(Ce(Seg{bot},:));
+  Top = TreeQSM.tools.average(Ce(Seg{top},:));
   V = Top-Bot;
   D = V'/norm(V);
 else

@@ -1,7 +1,7 @@
 function plot_distribution(QSM,fig,rela,cumu,dis,dis2,dis3,dis4)
 
 % ---------------------------------------------------------------------
-% PLOT_DISTRIBUTION     Plots the specified distribution(s) in the 
+% PLOT_DISTRIBUTION     Plots the specified distribution(s) in the
 %                           "treedata" field of the QSM structure array.
 %
 % Version 1.1.0
@@ -12,10 +12,10 @@ function plot_distribution(QSM,fig,rela,cumu,dis,dis2,dis3,dis4)
 %
 % Inputs:
 % QSM       The output of treeqsm function, may contain multiple models if
-%               only one distribution. If multiple distributions are plotted, 
+%               only one distribution. If multiple distributions are plotted,
 %               then only one model.
 % fig       Figure number
-% rela      If rela = 1, then plots relative values (%), otherwise plots 
+% rela      If rela = 1, then plots relative values (%), otherwise plots
 %               absolute values
 % cumu      If cumu = 1, then plot cumulative distribution
 % dis       Distribution to be plotted, string name, e.g. 'VolCylDia'.

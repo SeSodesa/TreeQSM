@@ -5,7 +5,7 @@ function [DistLines,DistOnRay,DistOnLines] = distances_between_lines(PointRay,Di
 % PointRay      A point of the ray
 % DirRay        Unit direction vector of the line
 % PointLines    One point of every line
-% DirLines      Unit direction vectors of the lines 
+% DirLines      Unit direction vectors of the lines
 
 PointLines = double(PointLines);
 PointRay = double(PointRay);
@@ -20,7 +20,7 @@ l = sqrt(sum(N.*N,2));
 N = [1./l.*N(:,1) 1./l.*N(:,2) 1./l.*N(:,3)];
 
 % Calculate the distances between the lines
-A = -mat_vec_subtraction(PointLines,PointRay);
+A = -TreeQSM.tools.mat_vec_subtraction(PointLines,PointRay);
 DistLines = sqrt(abs(sum(A.*N,2))); % distance between lines and the ray
 
 % Calculate the distances on ray and on lines

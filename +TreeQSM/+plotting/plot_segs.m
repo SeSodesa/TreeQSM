@@ -1,7 +1,7 @@
 function plot_segs(P,comps,fig,ms,Bal)
 
 % Plots the point cloud segments given in the cell array "comps".
-% If 4 inputs, cells contain the point indexes. If 5 input, cells contain 
+% If 4 inputs, cells contain the point indexes. If 5 input, cells contain
 % the indexes of the cover sets given by "Bal".
 % "fig" is the figure number and "ms" is the marker size.
 
@@ -51,7 +51,7 @@ end
 
 
 if nargin == 4
-    
+
     % Plot the segments
     figure(fig)
     C = comps{1};
@@ -64,9 +64,9 @@ if nargin == 4
     axis equal
     hold off
     pause(0.1)
-    
+
 else
-    
+
     np = size(P,1);
     D = false(np,1);
     C = unique(vertcat(Bal{comps{1}}));

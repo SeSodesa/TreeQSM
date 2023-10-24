@@ -1,17 +1,17 @@
 function Pass = cubical_downsampling(P,CubeSize)
 
-% Downsamples the given point cloud by selecting one point from each 
-% cube of side length "CubeSize". 
+% Downsamples the given point cloud by selecting one point from each
+% cube of side length "CubeSize".
 
 % The vertices of the big cube containing P
 Min = double(min(P));
 Max = double(max(P));
 
-% Number of cubes with edge length "EdgeLength" in the sides 
+% Number of cubes with edge length "EdgeLength" in the sides
 % of the big cube
 N = double(ceil((Max-Min)/CubeSize)+1);
 
-% Process the data in 1e7-point blocks to consume much less memory 
+% Process the data in 1e7-point blocks to consume much less memory
 np = size(P,1);
 m = 1e7;
 if np < m

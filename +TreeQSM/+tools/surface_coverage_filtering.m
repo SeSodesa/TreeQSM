@@ -1,7 +1,7 @@
 function [Pass,c] = surface_coverage_filtering(P,c,lh,ns)
 
 % ---------------------------------------------------------------------
-% SURFACE_COVERAGE_FILTERING.M    Filters a point cloud based on the 
+% SURFACE_COVERAGE_FILTERING.M    Filters a point cloud based on the
 %                                   assumption that it samples a cylinder
 %
 % Version 1.1.0
@@ -10,10 +10,10 @@ function [Pass,c] = surface_coverage_filtering(P,c,lh,ns)
 % Copyright (C) 2017-2021 Pasi Raumonen
 % ---------------------------------------------------------------------
 
-% Filter a 3d-point cloud based on given cylinder (axis and radius) by 
+% Filter a 3d-point cloud based on given cylinder (axis and radius) by
 % dividing the point cloud into "ns" equal-angle sectors and "lh"-height
-% layers along the axis. For each sector-layer intersection (a region in 
-% the cylinder surface) keep only the points closest to the axis. 
+% layers along the axis. For each sector-layer intersection (a region in
+% the cylinder surface) keep only the points closest to the axis.
 
 % Inputs:
 % P             Point cloud, (n_points x 3)-matrix
@@ -22,22 +22,22 @@ function [Pass,c] = surface_coverage_filtering(P,c,lh,ns)
 % lh            Height of the layers
 % ns            Number of sectors
 %
-% Outputs:              
+% Outputs:
 % Pass          Logical vector indicating which points pass the filtering
 % c             Cylinder, stucture array with additional fields "radius",
 %                 "SurfCov", "mad", "conv", "rel", estimated from the
 %                 filtering
 % ---------------------------------------------------------------------
 
-% Changes from version 1.0.0 to 1.1.0, 6 Oct 2021:  
+% Changes from version 1.0.0 to 1.1.0, 6 Oct 2021:
 % 1) Small changes to make the code little faster
 % 2) Change the radius estimation to make it much faster
- 
+
 
 % Compute the distances, heights and angles of the points
-[d,V,h] = distances_to_line(P,c.axis,c.start);
+[d,V,h] = TreeQSM.tools.distances_to_line(P,c.axis,c.start);
 h = h-min(h);
-[U,W] = orthonormal_vectors(c.axis);
+[U,W] = TreeQSM.tools.orthonormal_vectors(c.axis);
 V = V*[U W];
 ang = atan2(V(:,2),V(:,1))+pi;
 
@@ -88,7 +88,7 @@ d = d(SortOrd);
 Dis = zeros(nl,ns);
 Pass = false(np,1);
 p = 1; % index of point under processing
-k = 0; % number of nonempty cells 
+k = 0; % number of nonempty cells
 r = max(0.01,0.05*R); % cell diameter from the closest point
 while p <= np
   t = 1;

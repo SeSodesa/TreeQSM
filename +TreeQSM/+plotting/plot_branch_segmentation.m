@@ -9,17 +9,17 @@ function plot_branch_segmentation(P,cover,segment,Color,fig,ms,segind,BO)
 %
 % Copyright (C) 2013-2020 Pasi Raumonen
 % ---------------------------------------------------------------------
-% 
-% If the coloring is based on branches (Color = 'branch'), then each segment 
-% is colored with unique color. If the coloring is based on branching order 
-% (Color = 'order'), then Blue = trunk, Green = 1st-order branches, 
+%
+% If the coloring is based on branches (Color = 'branch'), then each segment
+% is colored with unique color. If the coloring is based on branching order
+% (Color = 'order'), then Blue = trunk, Green = 1st-order branches,
 % Red = 2nd-order branches, etc.
-% 
-% If segind = 1 and BO = 0, then plots the stem. If segind = 1 and BO = 1, 
-% then plots the stem and the 1st-order branches. If segind = 1 and 
-% BO >= maximum branching order or BO input is not given, then plots the 
+%
+% If segind = 1 and BO = 0, then plots the stem. If segind = 1 and BO = 1,
+% then plots the stem and the 1st-order branches. If segind = 1 and
+% BO >= maximum branching order or BO input is not given, then plots the
 % whole tree. If segind = 2 and BO is not given or it is high enough, then
-% plots the branch whose index is 2 and all its sub-branches. 
+% plots the branch whose index is 2 and all its sub-branches.
 %
 % Inputs
 % P         Point cloud
@@ -28,7 +28,7 @@ function plot_branch_segmentation(P,cover,segment,Color,fig,ms,segind,BO)
 % Color     Color option, 'order' or 'branch'
 % fig       Figure number
 % ms        Marker size
-% segind    Index of the segment where the plotting of tree structure starts. 
+% segind    Index of the segment where the plotting of tree structure starts.
 % BO        How many branching orders are plotted. 0 = stem, 1 = 1st order, etc
 
 n = nargin;
@@ -126,13 +126,13 @@ for i = 1:ns
     if i == 2
         hold on
     end
-    S = vertcat(Bal{Seg{segments(i)}});
+    S = vertcat(Bal{Seg{TreeQSM.main_steps.segments(i)}});
     if Color
-    % Coloring based on branch 
-    plot3(P(S,1),P(S,2),P(S,3),'.','Color',col(segments(i),:),'Markersize',ms)
+    % Coloring based on branch
+    plot3(P(S,1),P(S,2),P(S,3),'.','Color',col(TreeQSM.main_steps.segments(i),:),'Markersize',ms)
     else
     % Coloring based on branch order
-    plot3(P(S,1),P(S,2),P(S,3),'.','Color',col(order(i),:),'Markersize',ms)    
+    plot3(P(S,1),P(S,2),P(S,3),'.','Color',col(order(i),:),'Markersize',ms)
     end
 end
 hold off

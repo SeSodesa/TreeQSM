@@ -1,10 +1,10 @@
 function plot_cylinder_model2(cylinder,fig,nf,alp,Ind)
 
 % Plots the cylinder model.
-% cylinder  Structure array containin the cylinder info 
+% cylinder  Structure array containin the cylinder info
 %               (radius, length, start, axis, BranchOrder)
 % fig       Figure number
-% nf        Number of facets in the cyliders (in the thickest cylinder, 
+% nf        Number of facets in the cyliders (in the thickest cylinder,
 %               scales down with radius to 4 which is the minimum)
 % alp       Alpha value (1 = no trasparency, 0 = complete transparency)
 % Ind       Indexes of cylinders to be plotted from a subset of cylinders
@@ -15,7 +15,7 @@ Rad = cylinder.radius;
 Rad2 = cylinder.TopRadius;
 Len = cylinder.length;
 Sta = cylinder.start;
-Sta = mat_vec_subtraction(Sta,Sta(1,:));
+Sta = TreeQSM.tools.mat_vec_subtraction(Sta,Sta(1,:));
 Axe = cylinder.axis;
 BOrd = cylinder.BranchOrder;
 if nargin == 5
@@ -87,10 +87,10 @@ for i = 1:nc
     % Rotate
     ang = real(acos(Axe(i,3)));
     Axis = cross([0 0 1]',Axe(i,:)');
-    Rot = rotation_matrix(Axis,ang);
+    Rot = TreeQSM.tools.rotation_matrix(Axis,ang);
     C = (Rot*C')';
     % Translate
-    C = mat_vec_subtraction(C,-Sta(i,:));
+    C = TreeQSM.tools.mat_vec_subtraction(C,-Sta(i,:));
     Vert(t:t+2*n-1,:) = C;
     Facets(f:f+n-1,:) = Cir{n,2}+t-1;
     fvd(f:f+n-1,:) = repmat(col(BOrd(i)+1,:),[n 1]);

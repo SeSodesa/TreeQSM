@@ -7,24 +7,24 @@ function cir = least_squares_circle(P,Point0,Rad0,weight)
 %
 % Copyright (C) 2017-2021 Pasi Raumonen
 % ---------------------------------------------------------------------
-% Input    
+% Input
 % P         2d point cloud
 % Point0    Initial estimate of centre (1 x 2)
 % Rad0      Initial estimate of the circle radius
 % weight    Optional, weights for each point
-% 
-% Output  
+%
+% Output
 % Rad       Radius of the cylinder
 % Point     Centre point (1 x 2)
 % ArcCov    Arc point coverage (%), how much of the circle arc is covered with points
-% conv      If conv = 1, the algorithm has converged 
+% conv      If conv = 1, the algorithm has converged
 % rel       If rel = 1, the algorithm has reliable answer in terms of
 %               matrix inversion with a good enough condition number
 % ---------------------------------------------------------------------
 
 
 %% Initial estimates and other settings
-par = [Point0 Rad0]'; 
+par = [Point0 Rad0]';
 maxiter = 200; % maximum number of Gauss-Newton iteration
 iter = 0; % number of iterations so far
 conv = false; % converge of Gauss-Newton algorithm
@@ -35,10 +35,10 @@ end
 
 %% Gauss-Newton iterations
 while iter < maxiter && ~conv && rel
-  
+
   % Calculate the distances and Jacobian
-  [dist,J] = func_grad_circle(P,par,weight);
-  
+  [dist,J] = TreeQSM.least_squares_fitting.func_grad_circle(P,par,weight);
+
   % Calculate update step and gradient.
   SS0 = norm(dist); % Squared sum of the distances
   % solve for the system of equations: par(i+1) = par(i) - (J'J)^(-1)*J'd(par(i))
@@ -47,31 +47,31 @@ while iter < maxiter && ~conv && rel
   warning off
   p = -A\b; % solve for the system of equations
   warning on
-  
+
   % Update
   par = par+p;
-  
+
   % Check if the updated parameters lower the squared sum value
-  dist = func_grad_circle(P,par,weight);
+  dist = TreeQSM.least_squares_fitting.func_grad_circle(P,par,weight);
   SS1 = norm(dist);
   if SS1 > SS0
     % Update did not decreased the squared sum, use update with much
     % shorter update step
     par = par-0.95*p;
-    dist = func_grad_circle(P,par,weight);
+    dist = TreeQSM.least_squares_fitting.func_grad_circle(P,par,weight);
     SS1 = norm(dist);
   end
-  
+
   % Check reliability
   if rcond(A) < 10000*eps
     rel = false;
   end
-  
+
   % Check convergence
   if abs(SS0-SS1) < 1e-5
     conv = true;
   end
-  
+
   iter = iter+1;
 end
 
