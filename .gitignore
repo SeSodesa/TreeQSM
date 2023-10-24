@@ -1,1 +1,48 @@
-.DS_Store
+### .gitignore
+#
+# A file that instructs Git to ignore unwanted files. Since the list of files
+# and file types the we do not want is much greater than the list of files we
+# wish to include, we first deny all files and then allow individual files and
+# file types with the exclamation mark !.
+#
+
+## Disallow everything.
+
+*
+
+## Allow imporant individual files in project root.
+
+!LICENSE.md
+!.gitignore
+!.gitattributes
+!.editorconfig
+
+!create_input.m
+!estimate_precision.m
+!make_models.m
+!make_models_parallel.m
+!select_optimum.m
+!treeqsm.m
+
+## Allow README files in all folders.
+
+!**/
+!README
+!README.md
+!README.txt
+
+## Allow MATLAB files in the subpackages of this package.
+
+!+least_squares_fitting/**.m
+!+main_steps/**.m
+!+plotting/**.m
+!+results/**.m
+!+src/**.m
+!+tools/**.m
+!+triangulation/**.m
+
+## Allow Manual and related images.
+
+!Manual/
+!Manual/TreeQSM_documentation.pdf
+!Manual/fig_point_cloud_qsm.png
